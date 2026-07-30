@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Terminology Management and Terminology Services — Slide Draft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  @font-face{font-family:'Averta';src:url('https://www.regenstrief.org/wp-content/themes/regenstrief-institute/fonts/averta-regular.woff2') format('woff2'),url('https://www.regenstrief.org/wp-content/themes/regenstrief-institute/fonts/averta-regular.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'Averta';src:url('https://www.regenstrief.org/wp-content/themes/regenstrief-institute/fonts/Averta-Bold.woff2') format('woff2'),url('https://www.regenstrief.org/wp-content/themes/regenstrief-institute/fonts/Averta-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+  :root{
+    /* Regenstrief Design System tokens (regenstrief-design-system/tokens/*) */
+    --font-sans:'Averta','Plus Jakarta Sans',Arial,Helvetica,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+
+    --bg:#f7f9f9;             /* slate-50 / surface-sunken */
+    --card-bg:#ffffff;        /* surface-card */
+    --surface-dark:#343e48;   /* slate-800 / surface-dark */
+    --ink:#323c43;            /* dark-slate / text-primary */
+    --muted:#636363;          /* slate-600 / text-secondary */
+    --primary:#24afdf;        /* RI Azure / brand-primary */
+    --primary-dark:#0e5088;   /* blue-700 / brand-primary-hover */
+    --primary-tint:#e6f5fb;
+    --secondary:#574e8e;      /* CAR Purple / brand-secondary */
+    --secondary-tint:#efedf6;
+    --border:#dae2e3;         /* slate-200 / border-default */
+    --border-strong:#c1c1c1;  /* slate-300 / border-strong */
+
+    --success:#2d6a4f; --success-bg:#e7f3ed;
+    --warning:#a8641a; --warning-bg:#fbf0e0;
+    --danger:#a3272f;  --danger-bg:#fbe9ea;
+    --info:#0e5088;    --info-bg:#e6f0f7;
+
+    --radius-s:5px; --radius-m:5px; --radius-l:10px; --radius-pill:999px;
+    --shadow-s:0 1px 2px rgba(48,57,62,.08);
+    --shadow-m:0 4px 12px rgba(48,57,62,.10);
+    --border-w:1.5px;
+
+    --topbar-h:56px;
+    --navbar-h:52px;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    font-family:var(--font-sans); font-size:16px; line-height:1.6;
+    background:var(--bg); color:var(--ink);
+  }
+  #topbar{
+    height:var(--topbar-h); display:flex; align-items:center; gap:.75rem;
+    background:var(--surface-dark); color:#fff; padding:0 .9rem;
+    position:fixed; top:0; left:0; right:0; z-index:20;
+    font-size:.85rem;
+  }
+  #topbar .brand-mark{height:26px; width:26px; border-radius:50%; flex:0 0 auto;}
+  #topbar .title{font-weight:700; font-size:.95rem; white-space:nowrap;}
+  #topbar .draft-pill{
+    background:rgba(255,255,255,.18); border-radius:var(--radius-pill); padding:.15rem .6rem;
+    font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  }
+  #topbar .spacer{flex:1;}
+  #topbar button, #topbar label.filebtn{
+    background:rgba(255,255,255,.12); color:#fff; border:var(--border-w) solid rgba(255,255,255,.25);
+    border-radius:var(--radius-m); padding:.4rem .65rem; font-size:.78rem; font-weight:600; cursor:pointer;
+    white-space:nowrap;
+  }
+  #topbar button:hover, #topbar label.filebtn:hover{background:rgba(255,255,255,.22);}
+  #commentSummary{font-size:.75rem; opacity:.9; white-space:nowrap;}
+  #progressTrack{
+    position:fixed; top:var(--topbar-h); left:0; right:0; height:3px; background:rgba(0,0,0,.06); z-index:19;
+  }
+  #progressFill{height:100%; background:var(--primary); width:0%; transition:width .2s var(--ease-standard, ease);}
+
+  #layout{
+    position:fixed; top:calc(var(--topbar-h) + 3px); bottom:var(--navbar-h);
+    left:0; right:0; display:flex; overflow:hidden;
+  }
+  #sidebar{
+    width:250px; flex-shrink:0; background:#fff; border-right:var(--border-w) solid var(--border);
+    overflow-y:auto; padding:.5rem 0;
+  }
+  #sidebar.collapsed{display:none;}
+  .sidebar-item{
+    display:flex; align-items:center; gap:.5rem; padding:.5rem .8rem; cursor:pointer;
+    font-size:.78rem; color:var(--ink); border-left:3px solid transparent;
+  }
+  .sidebar-item:hover{background:var(--bg);}
+  .sidebar-item.active{background:var(--primary-tint); border-left-color:var(--primary); font-weight:600;}
+  .sidebar-num{color:var(--muted); font-weight:400; margin-right:.15rem;}
+  .badge{width:9px; height:9px; border-radius:50%; flex:0 0 auto;}
+  .badge-none{background:var(--border-strong);}
+  .badge-open{background:var(--warning);}
+  .badge-addressed{background:var(--success);}
+
+  #stageWrap{
+    flex:1; overflow-y:auto; display:flex; justify-content:center; padding:1.5rem 1.25rem 3rem;
+  }
+  .slide{
+    display:none; max-width:760px; width:100%; background:var(--card-bg);
+    border:var(--border-w) solid var(--border); border-radius:var(--radius-l); box-shadow:var(--shadow-m);
+    padding:2.2rem 2.6rem; min-height:70vh;
+  }
+  .slide.active{display:block;}
+  .eyebrow{
+    font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--primary);
+    font-weight:700; margin-bottom:.5rem;
+  }
+  .slide h2{margin:0 0 1rem; font-size:1.875rem; font-weight:700; line-height:1.3; color:var(--ink);}
+  .slide h3{font-size:1.0625rem; font-weight:700; margin:1.1rem 0 .4rem; color:var(--ink);}
+  .slide p{line-height:1.6; margin:.5rem 0;}
+  .slide ul{line-height:1.6; padding-left:1.2rem;}
+  .slide li{margin-bottom:.35rem;}
+  .subtitle{color:var(--muted); font-size:1rem; margin-top:-.5rem;}
+  .quote-block{
+    background:var(--bg); border-left:4px solid var(--primary); padding:.9rem 1.1rem;
+    border-radius:var(--radius-m); font-style:italic; color:var(--ink); margin:1rem 0;
+  }
+  .quote-src{font-style:normal; color:var(--muted); font-size:.8rem; display:block; margin-top:.4rem;}
+  .callout{
+    background:var(--warning-bg); border-left:4px solid var(--warning); padding:.9rem 1.1rem;
+    border-radius:var(--radius-m); margin:1rem 0;
+  }
+  .callout strong{color:var(--warning);}
+  .prompt-box{
+    background:var(--info-bg); border:1.5px dashed var(--info); border-radius:var(--radius-m); padding:.9rem 1.1rem; margin-top:1rem;
+    font-weight:600;
+  }
+  table.slide-table{width:100%; border-collapse:collapse; margin:.75rem 0; font-size:.85rem;}
+  table.slide-table th, table.slide-table td{
+    border:var(--border-w) solid var(--border); padding:.5rem .6rem; text-align:left; vertical-align:top;
+  }
+  table.slide-table th{background:var(--bg); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);}
+  table.slide-table td em{color:var(--muted);}
+
+  /* Diagrams */
+  .col{
+    flex:1; min-width:180px; border:var(--border-w) solid var(--border); border-radius:var(--radius-m); overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .col-head{background:var(--primary); color:#fff; padding:.5rem .7rem; font-weight:700; font-size:.85rem;}
+  .col-body{padding:.7rem .8rem; font-size:.82rem; color:var(--ink); background:#fff; flex:1;}
+
+  .quad-grid{display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin:1rem 0;}
+  .quad-grid .col{min-width:0;}
+  @media (max-width:520px){ .quad-grid{grid-template-columns:1fr;} }
+
+  .converge{margin:1rem 0;}
+  .converge-inputs{display:flex; gap:.4rem; justify-content:center; flex-wrap:wrap; margin-bottom:.35rem;}
+  .converge-chip{background:var(--bg); border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-pill); padding:.3rem .7rem; font-size:.75rem; font-family:var(--font-mono);}
+  .converge-chip.big{font-size:.85rem; padding:.4rem 1rem; font-family:var(--font-sans); font-weight:600;}
+  .converge-arrow{text-align:center; color:var(--muted); font-size:1.1rem; margin:.15rem 0;}
+  .converge-result{display:block; margin:0 auto; width:fit-content; background:var(--success-bg); border:var(--border-w) solid var(--success); border-radius:var(--radius-m); padding:.5rem 1rem; font-weight:700; font-size:.82rem; color:var(--success); text-align:center;}
+
+  .example-card{border:var(--border-w) solid var(--border); border-radius:var(--radius-l); padding:1rem 1.1rem; margin:1rem 0; border-left-width:4px;}
+  .example-card.narrowing{background:var(--primary-tint); border-left-color:var(--primary);}
+  .example-card.extending{background:var(--secondary-tint); border-left-color:var(--secondary);}
+  .example-label{font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted); margin-bottom:.6rem;}
+  .example-row{display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap;}
+  .example-row .converge{flex:1 1 260px; margin:0;}
+  .example-row .example-text{flex:1 1 220px; font-size:.85rem; color:var(--ink); line-height:1.6; margin:0;}
+
+  .contrast2{display:flex; gap:1rem; margin:1rem 0; flex-wrap:wrap;}
+  .contrast2 .box{flex:1; min-width:220px; border-radius:var(--radius-m); padding:1rem; border:var(--border-w) solid var(--border);}
+  .contrast2 .box.local{background:var(--secondary-tint); border-color:var(--secondary);}
+  .contrast2 .box.global{background:var(--primary-tint); border-color:var(--primary);}
+  .contrast2 .box.warn{background:var(--warning-bg); border-color:var(--warning);}
+  .contrast2 .box.good{background:var(--success-bg); border-color:var(--success);}
+  .contrast2 h4{margin:0 0 .4rem; font-size:.9rem;}
+
+  .mismatch-row{display:flex; align-items:center; gap:1rem; margin:1rem 0; flex-wrap:wrap;}
+  .mismatch-box{
+    flex:1; min-width:180px; border-radius:var(--radius-m); padding:.8rem 1rem; font-family:var(--font-mono); font-size:.82rem;
+  }
+  .mismatch-box.sent{background:var(--bg); border:var(--border-w) solid var(--border-strong);}
+  .mismatch-box.expected{background:var(--danger-bg); border:var(--border-w) solid var(--danger);}
+  .mismatch-label{display:block; font-family:var(--font-sans); font-weight:700; font-size:.72rem; text-transform:uppercase; color:var(--muted); margin-bottom:.3rem;}
+  .result-line{font-weight:700; margin-top:.5rem;}
+  .result-fail{color:var(--danger);}
+  .result-ok{color:var(--success);}
+
+  .source-figure{max-width:100%; height:auto; display:block; margin:1rem 0; border:var(--border-w) solid var(--border); border-radius:var(--radius-m);}
+  .title-logo{height:38px; margin-bottom:1.2rem;}
+
+  /* Icon grid */
+  .icon-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:.6rem; margin:1rem 0;}
+  .icon-grid.two-col{grid-template-columns:1fr 1fr;}
+  @media (max-width:420px){ .icon-grid.two-col{grid-template-columns:1fr;} }
+  .icon-item{display:flex; align-items:flex-start; gap:.55rem; background:var(--bg); border:var(--border-w) solid var(--border); border-radius:var(--radius-m); padding:.65rem .75rem;}
+  .icon-item .icon-glyph{font-size:1.25rem; line-height:1.2; flex:0 0 auto;}
+  .icon-item .icon-text{font-size:.85rem; color:var(--ink); font-weight:600;}
+  .icon-item .icon-sub{font-size:.74rem; color:var(--muted); font-weight:400; display:block; margin-top:.15rem;}
+
+  /* Architecture recap diagram (Slide 2) */
+  .arch-diagram{margin:1.1rem 0; border:var(--border-w) solid var(--border); border-radius:var(--radius-m); padding:.9rem .9rem .8rem; background:var(--bg);}
+  .arch-components{display:grid; grid-template-columns:repeat(4,1fr); gap:.4rem; margin-bottom:.6rem;}
+  .arch-component{background:#fff; border:var(--border-w) solid var(--border); border-radius:var(--radius-m); padding:.5rem .3rem; text-align:center; font-size:.7rem; font-weight:700; color:var(--ink);}
+  .arch-component.focus{background:var(--primary); color:#fff; border-color:var(--primary);}
+  .arch-layer{background:var(--primary); color:#fff; border-radius:var(--radius-m); padding:.55rem .8rem; text-align:center; font-weight:700; font-size:.82rem;}
+  @media (max-width:600px){ .arch-component{font-size:.6rem; padding:.4rem .2rem;} .arch-components{grid-template-columns:repeat(2,1fr);} }
+
+  details.notes-panel{margin-top:1.4rem; border-top:1px dashed var(--border); padding-top:.7rem;}
+  details.notes-panel summary{cursor:pointer; font-size:.78rem; color:var(--muted); font-weight:600;}
+  .notes-content{font-size:.82rem; color:var(--muted); margin-top:.5rem; line-height:1.6;}
+  .notes-content ul{padding-left:1.1rem;}
+  .notes-content code{background:var(--bg); padding:.05rem .3rem; border-radius:4px; font-size:.75rem; font-family:var(--font-mono);}
+
+  #commentPanel{
+    width:300px; flex-shrink:0; background:#fff; border-left:var(--border-w) solid var(--border);
+    padding:.9rem; overflow-y:auto; display:flex; flex-direction:column; gap:.6rem;
+  }
+  #commentPanel.collapsed{display:none;}
+  #commentPanel h4{margin:0; font-size:.85rem;}
+  #commentPanel textarea{
+    width:100%; min-height:140px; resize:vertical; border:var(--border-w) solid var(--border); border-radius:var(--radius-m);
+    padding:.55rem; font-size:.85rem; font-family:inherit;
+  }
+  #commentPanel select{padding:.35rem; border-radius:var(--radius-m); border:var(--border-w) solid var(--border); font-size:.8rem;}
+  #commentMeta{font-size:.7rem; color:var(--muted);}
+  .panel-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:700;}
+
+  #navbar{
+    position:fixed; bottom:0; left:0; right:0; height:var(--navbar-h);
+    background:#fff; border-top:var(--border-w) solid var(--border); display:flex; align-items:center;
+    justify-content:center; gap:1rem; z-index:20;
+  }
+  #navbar button{
+    background:var(--primary); color:#fff; border:none; border-radius:var(--radius-m); padding:.5rem 1rem;
+    font-size:.85rem; font-weight:600; cursor:pointer;
+  }
+  #navbar button:disabled{background:var(--border-strong); cursor:default;}
+  #navCounter{font-size:.82rem; color:var(--muted); min-width:70px; text-align:center;}
+  #navHint{font-size:.7rem; color:var(--muted);}
+
+  #reviewModal{
+    position:fixed; inset:0; background:rgba(50,60,67,.55); z-index:50;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #reviewModal.hidden{display:none;}
+  #reviewCard{
+    background:#fff; border-radius:var(--radius-l); width:min(640px,92vw); max-height:82vh; overflow-y:auto;
+    padding:1.4rem 1.6rem; box-shadow:var(--shadow-l, var(--shadow-m));
+  }
+  #reviewCard h3{margin-top:0;}
+  .review-row{border:var(--border-w) solid var(--border); border-radius:var(--radius-m); padding:.7rem .9rem; margin-bottom:.7rem;}
+  .review-head{display:flex; justify-content:space-between; align-items:center; gap:.5rem; font-size:.85rem;}
+  .review-text{font-size:.85rem; color:var(--ink); white-space:pre-wrap; margin:.4rem 0;}
+  .review-actions{display:flex; gap:.5rem;}
+  .review-actions button{
+    font-size:.72rem; padding:.3rem .6rem; border-radius:var(--radius-m); border:var(--border-w) solid var(--border);
+    background:var(--bg); cursor:pointer;
+  }
+  .pill{font-size:.68rem; padding:.15rem .55rem; border-radius:var(--radius-pill); font-weight:600; letter-spacing:.08em; text-transform:uppercase;}
+  .pill-open{background:var(--warning-bg); color:var(--warning);}
+  .pill-addressed{background:var(--success-bg); color:var(--success);}
+  .muted{color:var(--muted); font-size:.85rem;}
+  #closeReview{
+    float:right; background:none; border:none; font-size:1.1rem; cursor:pointer; color:var(--muted);
+  }
+  @media (max-width: 900px){
+    #sidebar{width:190px;}
+    #commentPanel{width:250px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <img class="brand-mark" src="images/ri-mark.png" alt="Regenstrief Institute">
+  <span class="title">Terminology Management &amp; Terminology Services</span>
+  <span class="draft-pill">First draft</span>
+  <button id="sidebarToggleBtn" title="Toggle slide list">☰ Slides</button>
+  <span class="spacer"></span>
+  <span id="commentSummary">0 comments (0 addressed)</span>
+  <button id="reviewBtn">Review comments</button>
+  <button id="exportMdBtn">Export ⤓ Markdown</button>
+  <button id="exportJsonBtn">Export ⤓ JSON</button>
+  <label class="filebtn">Import
+    <input id="importInput" type="file" accept="application/json" style="display:none;">
+  </label>
+  <button id="clearBtn">Clear all</button>
+</div>
+<div id="progressTrack"><div id="progressFill"></div></div>
+
+<div id="layout">
+  <nav id="sidebar" aria-label="Slide list">
+    <ul id="sidebarList" style="list-style:none; margin:0; padding:0;"></ul>
+  </nav>
+
+  <main id="stageWrap">
+
+    <!-- 1 -->
+    <section class="slide" data-section="Welcome" data-objective="">
+      <img class="title-logo" src="images/regenstrief-logo-vertical.png" alt="Regenstrief Institute">
+      <div class="eyebrow">Welcome</div>
+      <h2>Terminology Management and Terminology Services</h2>
+      <p class="subtitle">GF South Africa · DHU Lunch &amp; Learn series</p>
+      <p class="subtitle">Friday, 7 August 2026 · DHU Lunch &amp; Learn</p>
+      <div class="quote-block">
+        Last time we opened the HIE "black box" and met four registries — Who, Where, By whom, What. Today we go inside the fourth one: the Terminology Service.
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-section="Section 1 · Recap" data-objective="Sets up all objectives">
+      <div class="eyebrow">Section 1 · Recap the bridge from 24 July</div>
+      <h2>Where We Left Off</h2>
+      <div class="arch-diagram">
+        <div class="arch-components">
+          <div class="arch-component">Who?<br>Client Registry</div>
+          <div class="arch-component">Where?<br>Facility Registry</div>
+          <div class="arch-component">By whom?<br>Health Worker Reg.</div>
+          <div class="arch-component focus">What?<br>Terminology Service</div>
+        </div>
+        <div class="arch-layer">The four questions the HIE has to answer about every transaction</div>
+      </div>
+      <p>Today's throughline: what happens <em>inside</em> the Terminology Service box — both what it technically does, and the governance behind it.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Bridge line from 24 July: "Today we go deeper into how terminology is mapped, versioned, governed, and maintained, and who owns those decisions."
+        </div>
+      </details>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-section="Section 2 · Obj. 2" data-objective="Objective 2">
+      <div class="eyebrow">Section 2 · Objective 2</div>
+      <h2>Connected — But Not Understood</h2>
+      <p>A patient is diagnosed at a clinic. The record is sent, successfully, to a national data platform.</p>
+      <div class="mismatch-row">
+        <div class="mismatch-box sent"><span class="mismatch-label">Clinic sends</span>"Type 2 Diabetes" — ICD-10 E11.9 (Code A)</div>
+        <div style="font-size:1.3rem; color:var(--muted);">≠</div>
+        <div class="mismatch-box expected"><span class="mismatch-label">Platform logs it as</span>"Metabolic Disorder, Unspecified" — ICD-10 E88.9 (Code B)</div>
+      </div>
+      <p class="result-line result-ok">✓ Transaction succeeded. No error, no rejection.</p>
+      <p class="subtitle" style="margin-top:1rem;">Source: a real national terminology programme's own account of this exact failure mode, 2026. Codes shown are illustrative — real, valid ICD-10 codes chosen to fit the pattern described, not the literal codes from the original incident.</p>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-section="Section 2 · Obj. 2" data-objective="Objective 2">
+      <div class="eyebrow">Section 2 · Objective 2</div>
+      <h2>Did Anything Break?</h2>
+      <div class="prompt-box">Did anything break, technically? So why is this still a problem?</div>
+      <p>Nothing errors out. The systems are connected, and the message arrives — but the <strong>meaning</strong> didn't survive the trip.</p>
+      <p>That's the gap this whole session is about closing.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Optional callback to 24 July's HL7v2 lab-order mismatch: syntax and semantics are different failure modes.
+        </div>
+      </details>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
+      <div class="eyebrow">Section 3 · Objective 1</div>
+      <h2>Terminology vs. Terminology Service</h2>
+      <div class="contrast2">
+        <div class="box local">
+          <h4>Terminology</h4>
+          <p>The <strong>content</strong> — a set of codes and meanings. LOINC, ICD-10, or a local code system are all terminologies.</p>
+        </div>
+        <div class="box global">
+          <h4>Terminology Service</h4>
+          <p>The <strong>software</strong> that makes that content queryable and keeps it in sync with the systems using it.</p>
+        </div>
+      </div>
+      <p>This distinction is the spine of the whole session — everything else today is either about the content, or about the service that manages it.</p>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
+      <div class="eyebrow">Section 3 · Objective 1</div>
+      <h2>What Does a Terminology Service Actually Do?</h2>
+      <p>Other systems ask it questions, in real time:</p>
+      <div class="icon-grid two-col">
+        <div class="icon-item"><span class="icon-glyph">🔍</span><span class="icon-text">"Does this code exist?"<span class="icon-sub">Query the code system</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">✅</span><span class="icon-text">"Is this code valid here?"<span class="icon-sub">Validate against a value set</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🔄</span><span class="icon-text">"What's the equivalent code elsewhere?"<span class="icon-sub">Translate between systems</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">📋</span><span class="icon-text">"What are all the codes in this set?"<span class="icon-sub">Expand a value set</span></span></div>
+      </div>
+      <p>A terminology service isn't a static list — it's a live service other systems query constantly.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Not every system queries live — these four are the real-time pattern. Some systems instead export terminology content in bulk and align their own dictionary once; no ongoing querying needed after that.
+        </div>
+      </details>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
+      <div class="eyebrow">Section 3 · Objective 1</div>
+      <h2>Governing Codes Over Time</h2>
+      <p>Someone has to own an ongoing set of decisions:</p>
+      <div class="icon-grid">
+        <div class="icon-item"><span class="icon-glyph">➕</span><span class="icon-text">Versioning<span class="icon-sub">When do new codes get added?</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🔗</span><span class="icon-text">Mapping<span class="icon-sub">How do local codes relate to global ones?</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🗑️</span><span class="icon-text">Retiring<span class="icon-sub">When do outdated codes get withdrawn?</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">📤</span><span class="icon-text">Releasing<span class="icon-sub">When do updated code sets go out?</span></span></div>
+      </div>
+      <div class="callout">
+        <strong>What this looks like in practice:</strong> one national terminology programme automatically flags local entries that don't yet match a known standard code, and routes them into a governance report instead of leaving them silently inconsistent. That's "governing" — a routine, not a one-time event.
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
+      <div class="eyebrow">Section 4 · Objective 3</div>
+      <h2>Four Terminologies, Four Questions</h2>
+      <div class="quad-grid">
+        <div class="col">
+          <div class="col-head">ICD-10 / ICD-11</div>
+          <div class="col-body">WHO-managed. Answers: <strong>what disease or diagnosis?</strong></div>
+        </div>
+        <div class="col">
+          <div class="col-head">LOINC</div>
+          <div class="col-body">Answers: <strong>what lab test or clinical observation?</strong></div>
+        </div>
+        <div class="col">
+          <div class="col-head">SNOMED CT</div>
+          <div class="col-body">Used in 80+ countries. Answers: <strong>what clinical concept, in comprehensive detail?</strong></div>
+        </div>
+        <div class="col">
+          <div class="col-head">WHO-ATC</div>
+          <div class="col-body">WHO-managed. Answers: <strong>what medication or drug class?</strong></div>
+        </div>
+      </div>
+      <p>Each one answers a different question — that's why a country needs more than one, and why mapping between them is what makes a single patient's data comparable across facilities, provinces, and national reports.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          A country typically also needs a clinician-friendly interface terminology (e.g. CIEL) mapped back to these — point-of-service tools generally can't use SNOMED CT directly.
+        </div>
+      </details>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
+      <div class="eyebrow">Section 4 · Objective 3</div>
+      <h2>Localizing Doesn't Always Mean Shrinking It</h2>
+      <div class="example-card narrowing">
+        <div class="example-label">Example 1 · Narrowing</div>
+        <div class="example-row">
+          <div class="converge">
+            <div class="converge-inputs">
+              <span class="converge-chip big">LOINC: 100,000+ total codes</span>
+            </div>
+            <div class="converge-arrow">↓ select the lab codes a national programme actually needs ↓</div>
+            <span class="converge-result">Taiwan's national notifiable-disease lab subset: 20 pathogens, mapped across 53 hospitals</span>
+          </div>
+          <p class="example-text">Taiwan's national disease-surveillance programme didn't load all 100,000+ LOINC codes — it mapped local lab results to just the codes needed for notifiable-disease reporting, then rolled that subset into its national electronic lab reporting system.</p>
+        </div>
+      </div>
+      <div class="example-card extending">
+        <div class="example-label">Example 2 · Extending</div>
+        <div class="example-row">
+          <div class="converge">
+            <div class="converge-inputs">
+              <span class="converge-chip big">ICD-10: ~14,000 categories (WHO global standard)</span>
+            </div>
+            <div class="converge-arrow">↓ extend with country-specific detail ↓</div>
+            <span class="converge-result">ICD-10-CM (US): ~68,000 codes, adds US-specific clinical detail</span>
+          </div>
+          <p class="example-text">The US went the opposite direction with ICD-10: ICD-10-CM keeps every WHO category but adds far more granular, US-specific codes on top — nearly five times as many.</p>
+        </div>
+      </div>
+      <p>Either way, a country selects and governs its own version of a global standard — sometimes that means narrowing it to a relevant subset, sometimes it means extending it with local detail the global classification didn't anticipate.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Taiwan source: Taiwan CDC's national LOINC mapping project, 2014–2016, integrated into its National Notifiable Disease Surveillance System (PMC8464801) — a real, citable example.
+        </div>
+      </details>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
+      <div class="eyebrow">Section 4 · Objective 3</div>
+      <h2>Meet Nomsa</h2>
+      <p>Nomsa, 34, is on ART at her district's primary clinic. She's later admitted to the district hospital with a new TB diagnosis.</p>
+      <table class="slide-table">
+        <thead>
+          <tr><th>Step</th><th>Standard terminology</th><th>Illustrative code</th><th>Local/facility code in parallel use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Clinic — HIV diagnosis</td><td>ICD-10</td><td>B20</td><td>Paper register: free-text "HIV+"</td></tr>
+          <tr><td>Clinic — clinical concept</td><td>SNOMED CT / GPS</td><td>86406008 — HIV infection</td><td>—</td></tr>
+          <tr><td>Clinic — CD4/viral load result</td><td>LOINC</td><td>20447-9 — HIV 1 RNA [#/volume] (viral load) in Serum or Plasma by NAA with probe detection</td><td>EMR field "VL result," not mapped to LOINC</td></tr>
+          <tr><td>Clinic — ART regimen</td><td>WHO-ATC</td><td>J05AR27 — lamivudine, tenofovir disoproxil and dolutegravir (TLD)</td><td>Shorthand "Regimen 1a"</td></tr>
+          <tr><td>Hospital — new TB diagnosis</td><td>ICD-10</td><td>A15.0</td><td>Hospital's own GeneXpert lab-order code</td></tr>
+        </tbody>
+      </table>
+      <p class="subtitle">Fabricated patient and facilities — but the standard-terminology codes above are real, publicly documented codes (see speaker notes for sources), not placeholders. Only the "local/facility" column is invented.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Codes sourced via public terminology browsers, not the team's OCL instance — confirm before relying on them. J05AR27 (TLD) is South Africa's actual first-line ART regimen, worth saying out loud. LOINC 24467-3 (CD4 count) is the alternate to 20447-9 (viral load).
+        </div>
+      </details>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
+      <div class="eyebrow">Section 4 · Objective 3</div>
+      <h2>What Happens When Nomsa Is Referred?</h2>
+      <div class="prompt-box">
+        Nomsa's HIV and TB care already touches at least four global terminologies — and two local shorthand codes that only make sense inside one facility. What happens to her record when she's referred to a third facility that uses a third shorthand?
+      </div>
+      <p>Without governed mapping between local shorthand and global codes, her data can't reliably follow her — and it can't be aggregated into a provincial or national report either.</p>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>Four Building Blocks of a Well-Governed System</h2>
+      <div class="icon-grid two-col">
+        <div class="icon-item"><span class="icon-glyph">🖥️</span><span class="icon-text">Technology<span class="icon-sub">Terminology service, management interface, shared electronic reference</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">📖</span><span class="icon-text">Content<span class="icon-sub">ICD-11, SNOMED, LOINC, interface terminologies, local codes, mappings</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">⚖️</span><span class="icon-text">Governance<span class="icon-sub">Policy, leadership, investment, incentives</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🤝</span><span class="icon-text">Community<span class="icon-sub">Global SDOs, national MoH, NGOs, healthcare networks</span></span></div>
+      </div>
+      <p>All four reinforce each other. Technology without Governance has no rules to enforce; Content without Community has no source of shared standards to draw from. A well-governed national terminology system needs all four working together — not any one of them alone.</p>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>The Terminology Maturity Model</h2>
+      <img class="source-figure" src="images/maturity-model-v2-slide2.png" alt="OpenHIE Terminology Services Maturity Model v2 diagram: Nascent, Emerging, Shared Electronic Reference, Digital Subscription, Data Exchange, with a steep climb marked between Emerging and Shared Electronic Reference.">
+      <p>Most LMICs — and most provinces/programmes in this room — sit somewhere in the first two or three rungs. That's normal.</p>
+    </section>
+
+    <!-- 14 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>Is a Spreadsheet a Shared Electronic Reference?</h2>
+      <div class="contrast2">
+        <div class="box warn">
+          <h4>A "master list" spreadsheet or PDF</h4>
+          <p><strong>Emerging</strong> — even a well-maintained one, if programmes keep their own separate copies and use it siloed, ad hoc.</p>
+        </div>
+        <div class="box good">
+          <h4>Shared Electronic Reference</h4>
+          <p>Programmes <strong>consistently refer back to one place</strong> as definitions change — that's the difference, not the file format.</p>
+        </div>
+      </div>
+      <p>If your programme already keeps a spreadsheet of standard codes — that's Emerging, and Emerging isn't nothing. It's a real, named step. The climb is in how consistently it gets used, not in making the file nicer.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Backup quotes if useful: Emerging = "limited and siloed use of definitions"; Shared Electronic Reference = "consistently referred to... for full specification of definitions."
+        </div>
+      </details>
+    </section>
+
+    <!-- 15 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>Kenya: Harmonizing What Already Existed</h2>
+      <div class="converge">
+        <div class="converge-inputs">
+          <span class="converge-chip">KenyaEMR dictionary</span>
+          <span class="converge-chip">AMPATH OpenMRS dictionary</span>
+        </div>
+        <div class="converge-arrow">↓ reconcile: consolidate shared concepts, preserve genuinely unique ones ↓</div>
+        <span class="converge-result">One harmonized national concept dictionary</span>
+      </div>
+      <p>Kenya didn't start from zero, and didn't discard what already existed — it reconciled two pre-existing local dictionaries into a shared one, then filled gaps with global standards. That's now a public Shared Electronic Reference: <strong>knhts.health.go.ke</strong>.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Offered as a general pattern, not a claim about South Africa's actual current inventory.
+        </div>
+      </details>
+    </section>
+
+    <!-- 16 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>Localizing a Terminology: Two Directions</h2>
+      <div class="contrast2">
+        <div class="box global">
+          <h4>↓ Subsetting</h4>
+          <p>Take global standards (SNOMED, ICD, LOINC) and select the slice that's locally relevant — Section 4.</p>
+        </div>
+        <div class="box local">
+          <h4>↑ Harmonizing</h4>
+          <p>Take what's already locally in use — like Nomsa's clinic and hospital shorthand — and reconcile it up into something nationally shared and governed.</p>
+        </div>
+      </div>
+      <p>Neither direction alone is sufficient. South Africa isn't starting from zero — Nomsa's shorthand codes are exactly the kind of pre-existing, unharmonized local terminology every country already has before it builds anything national.</p>
+    </section>
+
+    <!-- 17 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>Where Are You on the Ladder?</h2>
+      <div class="prompt-box">
+        Where would you place your own province or programme on this ladder today, for the data domain you know best — and what local codes or shorthand would need to be harmonized first?
+      </div>
+    </section>
+
+    <!-- 18 -->
+    <section class="slide" data-section="Section 6 · Obj. 5" data-objective="Objective 5">
+      <div class="eyebrow">Section 6 · Objective 5</div>
+      <h2>South Africa's Path and Points of Contact</h2>
+      <div class="callout">
+        <strong>Placeholder — pending Carl's input (decided, Joe, 2026-07-29).</strong> South Africa's terminology governance work is [in progress / early-stage] — here's how to plug in.
+      </div>
+      <p>What this section needs, once sourced:</p>
+      <ul>
+        <li>An inventory — even partial — of terminologies/code sets already in active use across provinces and programmes</li>
+        <li>Who currently owns, or is expected to own, terminology governance and harmonization decisions in SA's DoH structure</li>
+        <li>Whether SA has, or is building, anything like a shared electronic reference for any domain</li>
+        <li>A named contact or channel for attendees who want to get involved</li>
+      </ul>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Nothing in source material covers South Africa's actual status here — confirm the real details with Carl before this goes live.
+        </div>
+      </details>
+    </section>
+
+    <!-- 19 -->
+    <section class="slide" data-section="Section 7 · Q&A" data-objective="">
+      <div class="eyebrow">Section 7 · Knowledge check</div>
+      <h2>Knowledge Check</h2>
+      <p><strong>Priority questions:</strong></p>
+      <ol>
+        <li>What terminologies — global and local — are already being used in your settings?</li>
+        <li>Where does your own domain sit on the maturity ladder today, and what's the one governance decision that would move it up a rung?</li>
+      </ol>
+    </section>
+
+    <!-- 20 -->
+    <section class="slide" data-section="Closing" data-objective="">
+      <div class="eyebrow">Thank you</div>
+      <h2>Thank You</h2>
+      <p>Today: what a terminology service does, how SNOMED CT/ICD-10/LOINC relate, how localization works in both directions, and the four building blocks of a well-governed national terminology system.</p>
+      <div class="quote-block">
+        We'd love your feedback on today's session.
+        <span class="quote-src">Feedback survey link: TBD — reuse the series-standard survey once confirmed (see agenda for this session).</span>
+      </div>
+    </section>
+
+  </main>
+
+  <aside id="commentPanel">
+    <h4>Your comments</h4>
+    <div class="panel-label" id="sectionTag"></div>
+    <details class="notes-panel-inline" style="border:none; margin:0; padding:0;">
+      <summary style="cursor:pointer; font-size:.75rem; color:var(--muted); font-weight:600;">Speaker notes for this slide ▾</summary>
+      <div id="notesBody" style="font-size:.78rem; color:var(--muted); margin-top:.4rem; line-height:1.5;"></div>
+    </details>
+    <hr style="border:none; border-top:1px solid var(--border); margin:.2rem 0;">
+    <label class="panel-label" for="commentBox">Feedback on this slide</label>
+    <textarea id="commentBox" placeholder="Type your comments on this slide here — saves automatically to this browser."></textarea>
+    <label class="panel-label" for="commentStatus">Status</label>
+    <select id="commentStatus">
+      <option value="open">Open</option>
+      <option value="addressed">Addressed</option>
+    </select>
+    <div id="commentMeta"></div>
+  </aside>
+</div>
+
+<div id="navbar">
+  <button id="prevBtn">← Prev</button>
+  <span id="navCounter">1 / 20</span>
+  <button id="nextBtn">Next →</button>
+  <span id="navHint">Arrow keys to navigate · R to review comments</span>
+</div>
+
+<div id="reviewModal" class="hidden">
+  <div id="reviewCard">
+    <button id="closeReview" title="Close">✕</button>
+    <h3>All comments</h3>
+    <div id="reviewBody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'termLnLDeckComments_v1';
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let current = 0;
+
+  function slideTitle(i){
+    const h2 = slides[i].querySelector('h2');
+    return h2 ? h2.textContent.trim() : ('Slide ' + (i+1));
+  }
+
+  function loadComments(){
+    try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function saveComments(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+  }
+  let comments = loadComments();
+
+  function badgeClass(i){
+    const c = comments[i];
+    if(!c || !c.text || !c.text.trim()) return 'badge-none';
+    return c.status === 'addressed' ? 'badge-addressed' : 'badge-open';
+  }
+
+  function buildSidebar(){
+    const list = document.getElementById('sidebarList');
+    list.innerHTML = '';
+    slides.forEach((s, i) => {
+      const li = document.createElement('li');
+      li.className = 'sidebar-item' + (i===current ? ' active' : '');
+      const badge = document.createElement('span');
+      badge.className = 'badge ' + badgeClass(i);
+      const label = document.createElement('span');
+      label.innerHTML = '<span class="sidebar-num">' + (i+1) + '.</span> ' + slideTitle(i);
+      li.appendChild(badge);
+      li.appendChild(label);
+      li.addEventListener('click', () => goTo(i));
+      list.appendChild(li);
+    });
+  }
+
+  function updateSummary(){
+    const vals = Object.values(comments).filter(c => c && c.text && c.text.trim());
+    const addressed = vals.filter(c => c.status === 'addressed').length;
+    document.getElementById('commentSummary').textContent =
+      vals.length + (vals.length===1 ? ' comment' : ' comments') + ' (' + addressed + ' addressed)';
+  }
+
+  function render(){
+    slides.forEach((s,i) => s.classList.toggle('active', i===current));
+    document.getElementById('navCounter').textContent = (current+1) + ' / ' + slides.length;
+    document.getElementById('progressFill').style.width = (((current+1)/slides.length)*100) + '%';
+
+    const s = slides[current];
+    document.getElementById('sectionTag').textContent = s.dataset.section || '';
+    const notes = s.querySelector('.notes-content');
+    document.getElementById('notesBody').innerHTML = notes ? notes.innerHTML : '<em>No notes.</em>';
+
+    const c = comments[current] || {text:'', status:'open'};
+    document.getElementById('commentBox').value = c.text || '';
+    document.getElementById('commentStatus').value = c.status || 'open';
+    document.getElementById('commentMeta').textContent = c.updatedAt ? ('Last saved ' + new Date(c.updatedAt).toLocaleString()) : '';
+
+    buildSidebar();
+    updateSummary();
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    document.getElementById('stageWrap').scrollTop = 0;
+  }
+
+  function goTo(i){ current = Math.max(0, Math.min(slides.length - 1, i)); render(); }
+  function next(){ goTo(current + 1); }
+  function prev(){ goTo(current - 1); }
+
+  let saveTimer = null;
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const text = document.getElementById('commentBox').value;
+      const status = document.getElementById('commentStatus').value;
+      if(!text.trim()){
+        delete comments[current];
+      } else {
+        comments[current] = { text: text, status: status, updatedAt: new Date().toISOString() };
+      }
+      saveComments();
+      buildSidebar();
+      updateSummary();
+      document.getElementById('commentMeta').textContent = 'Saved ' + new Date().toLocaleTimeString();
+    }, 500);
+  }
+  document.getElementById('commentBox').addEventListener('input', scheduleSave);
+  document.getElementById('commentStatus').addEventListener('change', scheduleSave);
+
+  document.getElementById('prevBtn').addEventListener('click', prev);
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('sidebarToggleBtn').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const tag = e.target.tagName;
+    if(tag === 'TEXTAREA' || tag === 'INPUT' || tag === 'SELECT') return;
+    if(e.key === 'ArrowRight' || e.key === ' '){ e.preventDefault(); next(); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); prev(); }
+    else if(e.key === 'r' || e.key === 'R'){ toggleReview(); }
+  });
+
+  function toggleReview(){
+    const modal = document.getElementById('reviewModal');
+    const opening = modal.classList.contains('hidden');
+    if(opening){ buildReview(); }
+    modal.classList.toggle('hidden');
+  }
+  function buildReview(){
+    const body = document.getElementById('reviewBody');
+    body.innerHTML = '';
+    const entries = Object.keys(comments)
+      .map(k => Object.assign({idx: Number(k)}, comments[k]))
+      .filter(c => c.text && c.text.trim())
+      .sort((a,b) => a.idx - b.idx);
+    if(entries.length === 0){
+      body.innerHTML = '<p class="muted">No comments yet. Type in the panel on the right while viewing any slide.</p>';
+      return;
+    }
+    entries.forEach(c => {
+      const row = document.createElement('div');
+      row.className = 'review-row';
+      const head = document.createElement('div');
+      head.className = 'review-head';
+      head.innerHTML = '<strong>Slide ' + (c.idx+1) + ': ' + slideTitle(c.idx) + '</strong>' +
+        '<span class="pill ' + (c.status==='addressed' ? 'pill-addressed' : 'pill-open') + '">' +
+        (c.status==='addressed' ? 'Addressed' : 'Open') + '</span>';
+      const text = document.createElement('p');
+      text.className = 'review-text';
+      text.textContent = c.text;
+      const actions = document.createElement('div');
+      actions.className = 'review-actions';
+      const jumpBtn = document.createElement('button');
+      jumpBtn.textContent = 'Jump to slide';
+      jumpBtn.addEventListener('click', () => { goTo(c.idx); toggleReview(); });
+      const toggleBtn = document.createElement('button');
+      toggleBtn.textContent = c.status==='addressed' ? 'Mark open' : 'Mark addressed';
+      toggleBtn.addEventListener('click', () => {
+        comments[c.idx].status = comments[c.idx].status==='addressed' ? 'open' : 'addressed';
+        comments[c.idx].updatedAt = new Date().toISOString();
+        saveComments();
+        buildReview(); buildSidebar(); updateSummary();
+        if(c.idx===current){ document.getElementById('commentStatus').value = comments[c.idx].status; }
+      });
+      actions.appendChild(jumpBtn);
+      actions.appendChild(toggleBtn);
+      row.appendChild(head); row.appendChild(text); row.appendChild(actions);
+      body.appendChild(row);
+    });
+  }
+  document.getElementById('reviewBtn').addEventListener('click', toggleReview);
+  document.getElementById('closeReview').addEventListener('click', toggleReview);
+  document.getElementById('reviewModal').addEventListener('click', (e) => {
+    if(e.target.id === 'reviewModal') toggleReview();
+  });
+
+  function dateStr(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function download(filename, content, type){
+    const blob = new Blob([content], {type: type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  document.getElementById('exportJsonBtn').addEventListener('click', () => {
+    download('term-lnl-comments-' + dateStr() + '.json', JSON.stringify(comments, null, 2), 'application/json');
+  });
+  document.getElementById('exportMdBtn').addEventListener('click', () => {
+    const entries = Object.keys(comments)
+      .map(k => Object.assign({idx: Number(k)}, comments[k]))
+      .filter(c => c.text && c.text.trim())
+      .sort((a,b) => a.idx - b.idx);
+    let md = '# Terminology Management and Terminology Services — Slide Comments\n\nExported ' + new Date().toLocaleString() + '\n\n';
+    if(entries.length === 0){ md += '_No comments yet._\n'; }
+    entries.forEach(c => {
+      md += '## Slide ' + (c.idx+1) + ': ' + slideTitle(c.idx) + '\n\n' +
+            '- [' + (c.status==='addressed' ? 'x' : ' ') + '] ' + (c.status==='addressed' ? 'Addressed' : 'Open') + '\n\n' +
+            c.text + '\n\n---\n\n';
+    });
+    download('term-lnl-comments-' + dateStr() + '.md', md, 'text/markdown');
+  });
+  document.getElementById('importInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const data = JSON.parse(reader.result);
+        comments = data || {};
+        saveComments();
+        render();
+        alert('Comments imported.');
+      }catch(err){
+        alert('Could not read that file — expected a JSON export from this tool.');
+      }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if(confirm('Clear all comments on this device? Export a backup first if you want to keep them.')){
+      comments = {};
+      saveComments();
+      render();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
