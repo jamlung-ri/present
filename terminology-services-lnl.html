@@ -406,30 +406,33 @@
     <!-- 8 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
       <div class="eyebrow">Section 4 · Objective 3</div>
-      <h2>Four Terminologies, Four Questions</h2>
+      <h2>Four Terminologies, Each With a Best Lane</h2>
       <div class="quad-grid">
         <div class="col">
           <div class="col-head">ICD-10 / ICD-11</div>
-          <div class="col-body">WHO-managed. Answers: <strong>what disease or diagnosis?</strong></div>
+          <div class="col-body">WHO-managed. Best for: <strong>disease or diagnosis</strong></div>
         </div>
         <div class="col">
           <div class="col-head">LOINC</div>
-          <div class="col-body">Answers: <strong>what lab test or clinical observation?</strong></div>
+          <div class="col-body">Best for: <strong>lab test or clinical observation</strong></div>
         </div>
         <div class="col">
           <div class="col-head">SNOMED CT</div>
-          <div class="col-body">Used in 80+ countries. Answers: <strong>what clinical concept, in comprehensive detail?</strong></div>
+          <div class="col-body">Used in 80+ countries. Best for: <strong>comprehensive clinical concepts</strong> — but also covers diagnoses and procedures</div>
         </div>
         <div class="col">
           <div class="col-head">WHO-ATC</div>
-          <div class="col-body">WHO-managed. Answers: <strong>what medication or drug class?</strong></div>
+          <div class="col-body">WHO-managed. Best for: <strong>medication or drug class</strong></div>
         </div>
       </div>
-      <p>Each one answers a different question — that's why a country needs more than one, and why mapping between them is what makes a single patient's data comparable across facilities, provinces, and national reports.</p>
+      <div class="callout">
+        <strong>Not a clean four-way split:</strong> these lanes overlap — SNOMED CT alone reaches into diagnoses and procedures too, so it isn't simply "the fourth category" alongside ICD, LOINC, and an interface terminology like CIEL. Each terminology has a lane it answers <em>best</em>, not one it owns exclusively.
+      </div>
+      <p>That overlap is exactly why a country needs more than one — and why mapping between them is what makes a single patient's data comparable across facilities, provinces, and national reports.</p>
       <details class="notes-panel">
         <summary>Speaker notes ▾</summary>
         <div class="notes-content">
-          A country typically also needs a clinician-friendly interface terminology (e.g. CIEL) mapped back to these — point-of-service tools generally can't use SNOMED CT directly.
+          Updated 2026-08-04 per Jennifer's feedback: the prior four-quadrant framing implied ICD/LOINC/SNOMED/CIEL sort neatly into non-overlapping categories, which overstates the separation. A country typically also needs a clinician-friendly interface terminology (e.g. CIEL) mapped back to these — point-of-service tools generally can't use SNOMED CT directly.
         </div>
       </details>
     </section>
