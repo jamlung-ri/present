@@ -404,13 +404,37 @@
     </section>
 
     <!-- 8 -->
+    <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
+      <div class="eyebrow">Section 3 · Objective 1</div>
+      <h2>South Africa Already Has One</h2>
+      <p>This isn't a hypothetical "someone should build this." South Africa's own health information regulations already name a single authoritative mapping service.</p>
+      <div class="icon-grid">
+        <div class="icon-item"><span class="icon-glyph">📖</span><span class="icon-text">One authoritative source<span class="icon-sub">Published maps are the national reference for translating coded data</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🔀</span><span class="icon-text">Between systems<span class="icon-sub">ICD-10 to ICD-11, SNOMED CT to the classifications, and more</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🕒</span><span class="icon-text">Between versions<span class="icon-sub">Managed version transitions as governing bodies release updates</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">📐</span><span class="icon-text">Built on standards<span class="icon-sub">ISO/TR 12300 and WHO-FIC mapping guidance</span></span></div>
+      </div>
+      <div class="quote-block">
+        "Maps may be the single most important element of the transition."
+        <span class="quote-src">— Clinical Coding Advisory Technical Working Group, South Africa</span>
+      </div>
+      <p>This is the <strong>National Terminological Mapping Service</strong> — South Africa's own real, named version of "governing codes over time." We'll come back to this shortly.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Added 2026-08-05, per Robin Dyers's Convergence Workshop deck. Regulation 9 names this as the national reference. Keep regulation numbers and "ISO/TR 12300" to speaker notes rather than reading them aloud — the point for this audience is "SA already has one," not the citation.
+        </div>
+      </details>
+    </section>
+
+    <!-- 9 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
       <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>Four Terminologies, Each With a Best Lane</h2>
       <div class="quad-grid">
         <div class="col">
-          <div class="col-head">ICD-10 / ICD-11</div>
-          <div class="col-body">WHO-managed. Best for: <strong>disease or diagnosis</strong></div>
+          <div class="col-head">ICD-11</div>
+          <div class="col-body">WHO-managed. Best for: <strong>disease or diagnosis</strong>. South Africa's designated target.</div>
         </div>
         <div class="col">
           <div class="col-head">LOINC</div>
@@ -421,23 +445,23 @@
           <div class="col-body">Used in 80+ countries. Best for: <strong>comprehensive clinical concepts</strong> — but also covers diagnoses and procedures</div>
         </div>
         <div class="col">
-          <div class="col-head">WHO-ATC</div>
-          <div class="col-body">WHO-managed. Best for: <strong>medication or drug class</strong></div>
+          <div class="col-head">ATC/DDD</div>
+          <div class="col-body">WHO-managed. Best for: <strong>medicines and drug utilisation</strong></div>
         </div>
       </div>
       <div class="callout">
-        <strong>Not a clean four-way split:</strong> these lanes overlap — SNOMED CT alone reaches into diagnoses and procedures too, so it isn't simply "the fourth category" alongside ICD, LOINC, and an interface terminology like CIEL. Each terminology has a lane it answers <em>best</em>, not one it owns exclusively.
+        <strong>Not a clean four-way split:</strong> these lanes overlap — SNOMED CT alone reaches into diagnoses and procedures too, so it isn't simply "the fourth category" alongside ICD, LOINC, and ATC/DDD. Each terminology has a lane it answers <em>best</em>, not one it owns exclusively.
       </div>
       <p>That overlap is exactly why a country needs more than one — and why mapping between them is what makes a single patient's data comparable across facilities, provinces, and national reports.</p>
       <details class="notes-panel">
         <summary>Speaker notes ▾</summary>
         <div class="notes-content">
-          Updated 2026-08-04 per Jennifer's feedback: the prior four-quadrant framing implied ICD/LOINC/SNOMED/CIEL sort neatly into non-overlapping categories, which overstates the separation. A country typically also needs a clinician-friendly interface terminology (e.g. CIEL) mapped back to these — point-of-service tools generally can't use SNOMED CT directly.
+          Updated 2026-08-04 per Jennifer's feedback: the prior four-quadrant framing implied ICD/LOINC/SNOMED/CIEL sort neatly into non-overlapping categories, which overstates the separation. Updated 2026-08-05 per Robin Dyers's Convergence-Deck: swapped the WHO-ATC label to ATC/DDD and ICD-10/11 to ICD-11 to match South Africa's actual designated-systems regulation; added the real 7-system list and flagged the ICD-10→11 transition and CIEL as corrections. A country typically also needs a clinician-friendly interface terminology (e.g. CIEL) mapped back to these — point-of-service tools generally can't use SNOMED CT directly — but frame this generically now, not naming CIEL as SA-designated.
         </div>
       </details>
     </section>
 
-    <!-- 9 -->
+    <!-- 10 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
       <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>Localizing Doesn't Always Mean Shrinking It</h2>
@@ -476,7 +500,7 @@
       </details>
     </section>
 
-    <!-- 10 -->
+    <!-- 11 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
       <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>Meet Nomsa</h2>
@@ -486,23 +510,23 @@
           <tr><th>Step</th><th>Standard terminology</th><th>Illustrative code</th><th>Local/facility code in parallel use</th></tr>
         </thead>
         <tbody>
-          <tr><td>Clinic — HIV diagnosis</td><td>ICD-10</td><td>B20</td><td>Paper register: free-text "HIV+"</td></tr>
+          <tr><td>Clinic — HIV diagnosis</td><td>ICD-10 → ICD-11 <span style="color:var(--muted); font-weight:400;">(SA's designated target)</span></td><td>B20 (ICD-10)</td><td>Paper register: free-text "HIV+"</td></tr>
           <tr><td>Clinic — clinical concept</td><td>SNOMED CT / GPS</td><td>86406008 — HIV infection</td><td>—</td></tr>
           <tr><td>Clinic — CD4/viral load result</td><td>LOINC</td><td>20447-9 — HIV 1 RNA [#/volume] (viral load) in Serum or Plasma by NAA with probe detection</td><td>EMR field "VL result," not mapped to LOINC</td></tr>
-          <tr><td>Clinic — ART regimen</td><td>WHO-ATC</td><td>J05AR27 — lamivudine, tenofovir disoproxil and dolutegravir (TLD)</td><td>Shorthand "Regimen 1a"</td></tr>
-          <tr><td>Hospital — new TB diagnosis</td><td>ICD-10</td><td>A15.0</td><td>Hospital's own GeneXpert lab-order code</td></tr>
+          <tr><td>Clinic — ART regimen</td><td>ATC/DDD</td><td>J05AR27 — lamivudine, tenofovir disoproxil and dolutegravir (TLD)</td><td>Shorthand "Regimen 1a"</td></tr>
+          <tr><td>Hospital — new TB diagnosis</td><td>ICD-10 → ICD-11</td><td>A15.0 (ICD-10)</td><td>Hospital's own GeneXpert lab-order code</td></tr>
         </tbody>
       </table>
-      <p class="subtitle">Fabricated patient and facilities — but the standard-terminology codes above are real, publicly documented codes (see speaker notes for sources), not placeholders. Only the "local/facility" column is invented.</p>
+      <p class="subtitle">Fabricated patient and facilities — but the standard-terminology codes above are real, publicly documented codes (see speaker notes for sources), not placeholders. Only the "local/facility" column is invented. The ICD-10→ICD-11 transition shown here is real and current — South Africa's own National Terminological Mapping Service is what handles exactly this translation.</p>
       <details class="notes-panel">
         <summary>Speaker notes ▾</summary>
         <div class="notes-content">
-          Codes sourced via public terminology browsers, not the team's OCL instance — confirm before relying on them. J05AR27 (TLD) is South Africa's actual first-line ART regimen, worth saying out loud. LOINC 24467-3 (CD4 count) is the alternate to 20447-9 (viral load).
+          Codes sourced via public terminology browsers, not the team's OCL instance — confirm before relying on them. J05AR27 (TLD) is South Africa's actual first-line ART regimen, worth saying out loud. LOINC 24467-3 (CD4 count) is the alternate to 20447-9 (viral load). Updated 2026-08-05: ICD-10 cells now flagged against ICD-11 as SA's designated target (Convergence-Deck), and the ART regimen row relabeled ATC/DDD to match SA's actual designated-systems terminology.
         </div>
       </details>
     </section>
 
-    <!-- 11 -->
+    <!-- 12 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
       <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>What Happens When Nomsa Is Referred?</h2>
@@ -510,9 +534,10 @@
         Nomsa's HIV and TB care already touches at least four global terminologies — and two local shorthand codes that only make sense inside one facility. What happens to her record when she's referred to a third facility that uses a third shorthand?
       </div>
       <p>Without governed mapping between local shorthand and global codes, her data can't reliably follow her — and it can't be aggregated into a provincial or national report either.</p>
+      <p>Her ICD-10-to-11 transition adds a second, real mapping dimension on top of the local-shorthand one — "between systems" and "between versions" are both live for Nomsa's record right now, and both are exactly what South Africa's own National Terminological Mapping Service exists to handle.</p>
     </section>
 
-    <!-- 12 -->
+    <!-- 13 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
       <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Four Building Blocks of a Well-Governed System</h2>
@@ -525,7 +550,7 @@
       <p>All four reinforce each other. Technology without Governance has no rules to enforce; Content without Community has no source of shared standards to draw from. A well-governed national terminology system needs all four working together — not any one of them alone.</p>
     </section>
 
-    <!-- 13 -->
+    <!-- 14 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
       <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>The Terminology Maturity Model</h2>
@@ -533,7 +558,7 @@
       <p>Most LMICs — and most provinces/programmes in this room — sit somewhere in the first two or three rungs. That's normal.</p>
     </section>
 
-    <!-- 14 -->
+    <!-- 15 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
       <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Is a Spreadsheet a Shared Electronic Reference?</h2>
@@ -556,7 +581,46 @@
       </details>
     </section>
 
-    <!-- 15 -->
+    <!-- 16 -->
+    <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
+      <div class="eyebrow">Section 5 · Objective 4</div>
+      <h2>Moving Up a Rung: What Actually Changes</h2>
+      <p>The climb isn't about better technology alone — each rung asks for a different move in Content, Governance, and Use.</p>
+      <table class="slide-table">
+        <thead>
+          <tr><th>Moving from → to</th><th>Content</th><th>Governance</th><th>Use</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Emerging → Shared Electronic Reference</td>
+            <td>Pick 1–2 priority domains (e.g. a drug list or disease-code set) and publish one shared definition, not scattered spreadsheets</td>
+            <td>Stand up a governance process — even lightweight — with named stakeholders at the table</td>
+            <td>Name one system as the terminology reference and require programmes to point back to it</td>
+          </tr>
+          <tr>
+            <td>Shared Electronic Reference → Digital Subscription</td>
+            <td>Extend shared definitions from priority domains to most of the country's major content areas</td>
+            <td>Make the governance process consistent and routine, not ad hoc — even if scope stays narrow</td>
+            <td>Move from manual look-up to electronic subscription, so systems auto-update instead of copy-pasting</td>
+          </tr>
+          <tr>
+            <td>Digital Subscription → Data Exchange</td>
+            <td>Coordinate standards development and publication across every major programme and domain, not just most</td>
+            <td>Make stakeholder engagement the default for every decision, not the exception</td>
+            <td>Wire the reference into live transactions — validation, translation, value-set expansion — and into system-wide monitoring</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="subtitle">Each step is a smaller, concrete move — not a leap. Most programmes climb one cell at a time, not one row at a time.</p>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Derived from the maturity model's per-subdomain (Content/Governance/Use) definitions at each level. Nascent → Emerging isn't included here since most of this room is already past Nascent; happy to add it if the audience needs it.
+        </div>
+      </details>
+    </section>
+
+    <!-- 17 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
       <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Kenya: Harmonizing What Already Existed</h2>
@@ -577,24 +641,24 @@
       </details>
     </section>
 
-    <!-- 16 -->
+    <!-- 18 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
       <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Localizing a Terminology: Two Directions</h2>
       <div class="contrast2">
         <div class="box global">
           <h4>↓ Subsetting</h4>
-          <p>Take global standards (SNOMED, ICD, LOINC) and select the slice that's locally relevant — Section 4.</p>
+          <p>Take global standards (SNOMED, ICD, LOINC) and select the slice that's locally relevant.</p>
         </div>
         <div class="box local">
           <h4>↑ Harmonizing</h4>
           <p>Take what's already locally in use — like Nomsa's clinic and hospital shorthand — and reconcile it up into something nationally shared and governed.</p>
         </div>
       </div>
-      <p>Neither direction alone is sufficient. South Africa isn't starting from zero — Nomsa's shorthand codes are exactly the kind of pre-existing, unharmonized local terminology every country already has before it builds anything national.</p>
+      <p>Neither direction alone is sufficient. The top-down half is already under way for South Africa — the 7 designated systems and National Terminological Mapping Service are exactly this. What's still unconfirmed is the bottom-up half: the actual inventory of existing facility/programme dictionaries — like Nomsa's shorthand codes — that will need reconciling into it.</p>
     </section>
 
-    <!-- 17 -->
+    <!-- 19 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
       <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Where Are You on the Ladder?</h2>
@@ -603,29 +667,44 @@
       </div>
     </section>
 
-    <!-- 18 -->
+    <!-- 20 -->
     <section class="slide" data-section="Section 6 · Obj. 5" data-objective="Objective 5">
       <div class="eyebrow">Section 6 · Objective 5</div>
-      <h2>South Africa's Path and Points of Contact</h2>
-      <div class="callout">
-        <strong>Placeholder — pending Carl's input (decided, Joe, 2026-07-29).</strong> South Africa's terminology governance work is [in progress / early-stage] — here's how to plug in.
-      </div>
-      <p>What this section needs, once sourced:</p>
-      <ul>
-        <li>An inventory — even partial — of terminologies/code sets already in active use across provinces and programmes</li>
-        <li>Who currently owns, or is expected to own, terminology governance and harmonization decisions in SA's DoH structure</li>
-        <li>Whether SA has, or is building, anything like a shared electronic reference for any domain</li>
-        <li>A named contact or channel for attendees who want to get involved</li>
-      </ul>
+      <h2>South Africa Already Has a Structure</h2>
+      <p>This is real, current, and sourced — not aspirational.</p>
+      <img class="source-figure" src="images/bignumbers.png" alt="Three stat cards: 7 designated systems, one shared meaning; 5 years of managed, phased transition; 16 formal stakeholder submissions shaped the draft.">
+      <p><strong>Governance chain:</strong></p>
+      <img class="source-figure" src="images/sa-terminology-structure.png" alt="Diagram: Minister of Health leads to National Health Council (section 22 of the Act), leads to NHISSA Committee (national health information system), leads to Clinical Coding Advisory TWG (advisory committee under section 91, reg 8), which connects to the National Terminological Mapping Service (reg 9) via HNSF Interoperability stakeholders, to five workstreams (WS1 ICD-11, WS2 ICHI + LOINC, WS3 ICF, WS4 ATC/DDD + GMDN, WS5 SNOMED CT), and dashed-line to implementing actors (Provinces, Private sector, Academia, Council for Medical Schemes, Statistics South Africa). Caption: advice flows up, coordination flows down, implementation is decentralised (chapters 3 to 5 of the Act).">
       <details class="notes-panel">
         <summary>Speaker notes ▾</summary>
         <div class="notes-content">
-          Nothing in source material covers South Africa's actual status here — confirm the real details with Carl before this goes live.
+          Added 2026-08-05. Source: Robin Dyers, Clinical Coding Advisory TWG, "The Semantic Layer of Health Interoperability," AeHIN Digital Health Convergence Workshop, July 2026 — figures reproduced directly from the source deck. Confirm with Carl whether naming the TWG/regulation numbers this specifically is fine for this audience, or should stay at "a national committee" level.
         </div>
       </details>
     </section>
 
-    <!-- 19 -->
+    <!-- 21 -->
+    <section class="slide" data-section="Section 6 · Obj. 5" data-objective="Objective 5">
+      <div class="eyebrow">Section 6 · Objective 5</div>
+      <h2>What's Still Open — and How to Get Involved</h2>
+      <div class="icon-grid two-col">
+        <div class="icon-item"><span class="icon-glyph">📋</span><span class="icon-text">Inventory<span class="icon-sub">7 designated systems, nationally — local/facility inventory still unconfirmed</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🏛️</span><span class="icon-text">Owner<span class="icon-sub">Clinical Coding Advisory TWG, under NHISSA</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">🗺️</span><span class="icon-text">Shared reference<span class="icon-sub">National Terminological Mapping Service</span></span></div>
+        <div class="icon-item"><span class="icon-glyph">📞</span><span class="icon-text">Contact<span class="icon-sub">Clinical Coding Advisory TWG</span></span></div>
+      </div>
+      <div class="callout">
+        <strong>Still open:</strong> what facility/programme-level local codes and shorthand — the Nomsa kind — are actually in parallel use across provinces, and how far along each is on harmonizing into the national systems.
+      </div>
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          This is also the natural home for Q&amp;A question 1 in Section 7 — capture what attendees say live as real-time, informal input toward the same local-inventory gap named above.
+        </div>
+      </details>
+    </section>
+
+    <!-- 22 -->
     <section class="slide" data-section="Section 7 · Q&A" data-objective="">
       <div class="eyebrow">Section 7 · Knowledge check</div>
       <h2>Knowledge Check</h2>
@@ -636,11 +715,11 @@
       </ol>
     </section>
 
-    <!-- 20 -->
+    <!-- 23 -->
     <section class="slide" data-section="Closing" data-objective="">
       <div class="eyebrow">Thank you</div>
       <h2>Thank You</h2>
-      <p>Today: what a terminology service does, how SNOMED CT/ICD-10/LOINC relate, how localization works in both directions, and the four building blocks of a well-governed national terminology system.</p>
+      <p>Today: what a terminology service does, how SNOMED CT/ICD-11/LOINC relate, how localization works in both directions, South Africa's own designated systems and governance structure, and the four building blocks of a well-governed national terminology system.</p>
       <div class="quote-block">
         We'd love your feedback on today's session.
         <span class="quote-src">Feedback survey link: TBD — reuse the series-standard survey once confirmed (see agenda for this session).</span>
@@ -670,7 +749,7 @@
 
 <div id="navbar">
   <button id="prevBtn">← Prev</button>
-  <span id="navCounter">1 / 20</span>
+  <span id="navCounter">1 / 23</span>
   <button id="nextBtn">Next →</button>
   <span id="navHint">Arrow keys to navigate · R to review comments</span>
 </div>
