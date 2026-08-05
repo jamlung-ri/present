@@ -85,6 +85,8 @@
   }
   .sidebar-item:hover{background:var(--bg);}
   .sidebar-item.active{background:var(--primary-tint); border-left-color:var(--primary); font-weight:600;}
+  .sidebar-item-hidden{opacity:.6; font-style:italic;}
+  .hidden-tag{font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-style:normal; margin-left:.3rem;}
   .sidebar-num{color:var(--muted); font-weight:400; margin-right:.15rem;}
   .badge{width:9px; height:9px; border-radius:50%; flex:0 0 auto;}
   .badge-none{background:var(--border-strong);}
@@ -100,10 +102,6 @@
     padding:2.2rem 2.6rem; min-height:70vh;
   }
   .slide.active{display:block;}
-  .eyebrow{
-    font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--primary);
-    font-weight:700; margin-bottom:.5rem;
-  }
   .slide h2{margin:0 0 1rem; font-size:1.875rem; font-weight:700; line-height:1.3; color:var(--ink);}
   .slide h3{font-size:1.0625rem; font-weight:700; margin:1.1rem 0 .4rem; color:var(--ink);}
   .slide p{line-height:1.6; margin:.5rem 0;}
@@ -130,6 +128,11 @@
   }
   table.slide-table th{background:var(--bg); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);}
   table.slide-table td em{color:var(--muted);}
+
+  .checklist{list-style:none; margin:0; padding:0;}
+  .checklist li{display:flex; align-items:flex-start; gap:.45rem; margin-bottom:.35rem; font-size:.8rem; line-height:1.4;}
+  .checklist li:last-child{margin-bottom:0;}
+  .checklist input[type="checkbox"]{margin-top:.2rem; flex:0 0 auto; width:14px; height:14px; accent-color:var(--success);}
 
   /* Diagrams */
   .col{
@@ -290,7 +293,6 @@
     <!-- 1 -->
     <section class="slide" data-section="Welcome" data-objective="">
       <img class="title-logo" src="images/regenstrief-logo-vertical.png" alt="Regenstrief Institute">
-      <div class="eyebrow">Welcome</div>
       <h2>Terminology Management and Terminology Services</h2>
       <p class="subtitle">GF South Africa · DHU Lunch &amp; Learn series</p>
       <p class="subtitle">Friday, 7 August 2026 · DHU Lunch &amp; Learn</p>
@@ -301,7 +303,6 @@
 
     <!-- 2 -->
     <section class="slide" data-section="Section 1 · Recap" data-objective="Sets up all objectives">
-      <div class="eyebrow">Section 1 · Recap the bridge from 24 July</div>
       <h2>Where We Left Off</h2>
       <div class="arch-diagram">
         <div class="arch-components">
@@ -323,7 +324,6 @@
 
     <!-- 3 -->
     <section class="slide" data-section="Section 2 · Obj. 2" data-objective="Objective 2">
-      <div class="eyebrow">Section 2 · Objective 2</div>
       <h2>Connected — But Not Understood</h2>
       <p>A patient is diagnosed at a clinic. The record is sent, successfully, to a national data platform.</p>
       <div class="mismatch-row">
@@ -337,7 +337,6 @@
 
     <!-- 4 -->
     <section class="slide" data-section="Section 2 · Obj. 2" data-objective="Objective 2">
-      <div class="eyebrow">Section 2 · Objective 2</div>
       <h2>Did Anything Break?</h2>
       <div class="prompt-box">Did anything break, technically? So why is this still a problem?</div>
       <p>Nothing errors out. The systems are connected, and the message arrives — but the <strong>meaning</strong> didn't survive the trip.</p>
@@ -352,7 +351,6 @@
 
     <!-- 5 -->
     <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
-      <div class="eyebrow">Section 3 · Objective 1</div>
       <h2>Terminology vs. Terminology Service</h2>
       <div class="contrast2">
         <div class="box local">
@@ -369,7 +367,6 @@
 
     <!-- 6 -->
     <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
-      <div class="eyebrow">Section 3 · Objective 1</div>
       <h2>What Does a Terminology Service Actually Do?</h2>
       <p>Other systems ask it questions, in real time:</p>
       <div class="icon-grid two-col">
@@ -389,7 +386,6 @@
 
     <!-- 7 -->
     <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
-      <div class="eyebrow">Section 3 · Objective 1</div>
       <h2>Governing Codes Over Time</h2>
       <p>Someone has to own an ongoing set of decisions:</p>
       <div class="icon-grid">
@@ -405,7 +401,6 @@
 
     <!-- 8 -->
     <section class="slide" data-section="Section 3 · Obj. 1" data-objective="Objective 1">
-      <div class="eyebrow">Section 3 · Objective 1</div>
       <h2>South Africa Already Has One</h2>
       <p>This isn't a hypothetical "someone should build this." South Africa's own health information regulations already name a single authoritative mapping service.</p>
       <div class="icon-grid">
@@ -429,7 +424,6 @@
 
     <!-- 9 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
-      <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>Four Terminologies, Each With a Best Lane</h2>
       <div class="quad-grid">
         <div class="col">
@@ -463,7 +457,6 @@
 
     <!-- 10 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
-      <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>Localizing Doesn't Always Mean Shrinking It</h2>
       <div class="example-card narrowing">
         <div class="example-label">Example 1 · Narrowing</div>
@@ -502,7 +495,6 @@
 
     <!-- 11 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
-      <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>Meet Nomsa</h2>
       <p>Nomsa, 34, is on ART at her district's primary clinic. She's later admitted to the district hospital with a new TB diagnosis.</p>
       <table class="slide-table">
@@ -528,7 +520,6 @@
 
     <!-- 12 -->
     <section class="slide" data-section="Section 4 · Obj. 3" data-objective="Objective 3">
-      <div class="eyebrow">Section 4 · Objective 3</div>
       <h2>What Happens When Nomsa Is Referred?</h2>
       <div class="prompt-box">
         Nomsa's HIV and TB care already touches at least four global terminologies — and two local shorthand codes that only make sense inside one facility. What happens to her record when she's referred to a third facility that uses a third shorthand?
@@ -539,7 +530,6 @@
 
     <!-- 13 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Four Building Blocks of a Well-Governed System</h2>
       <div class="icon-grid two-col">
         <div class="icon-item"><span class="icon-glyph">🖥️</span><span class="icon-text">Technology<span class="icon-sub">Terminology service, management interface, shared electronic reference</span></span></div>
@@ -552,7 +542,6 @@
 
     <!-- 14 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>The Terminology Maturity Model</h2>
       <img class="source-figure" src="images/maturity-model-v2-slide2.png" alt="OpenHIE Terminology Services Maturity Model v2 diagram: Nascent, Emerging, Shared Electronic Reference, Digital Subscription, Data Exchange, with a steep climb marked between Emerging and Shared Electronic Reference.">
       <p>Most LMICs — and most provinces/programmes in this room — sit somewhere in the first two or three rungs. That's normal.</p>
@@ -560,7 +549,6 @@
 
     <!-- 15 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Is a Spreadsheet a Shared Electronic Reference?</h2>
       <div class="contrast2">
         <div class="box warn">
@@ -583,7 +571,6 @@
 
     <!-- 16 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Moving Up a Rung: What Actually Changes</h2>
       <p>The climb isn't about better technology alone — each rung asks for a different move in Content, Governance, and Use.</p>
       <table class="slide-table">
@@ -622,7 +609,6 @@
 
     <!-- 17 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Kenya: Harmonizing What Already Existed</h2>
       <div class="converge">
         <div class="converge-inputs">
@@ -643,7 +629,6 @@
 
     <!-- 18 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Localizing a Terminology: Two Directions</h2>
       <div class="contrast2">
         <div class="box global">
@@ -660,7 +645,6 @@
 
     <!-- 19 -->
     <section class="slide" data-section="Section 5 · Obj. 4" data-objective="Objective 4">
-      <div class="eyebrow">Section 5 · Objective 4</div>
       <h2>Where Are You on the Ladder?</h2>
       <div class="prompt-box">
         Where would you place your own province or programme on this ladder today, for the data domain you know best — and what local codes or shorthand would need to be harmonized first?
@@ -669,23 +653,88 @@
 
     <!-- 20 -->
     <section class="slide" data-section="Section 6 · Obj. 5" data-objective="Objective 5">
-      <div class="eyebrow">Section 6 · Objective 5</div>
-      <h2>South Africa Already Has a Structure</h2>
-      <p>This is real, current, and sourced — not aspirational.</p>
-      <img class="source-figure" src="images/bignumbers.png" alt="Three stat cards: 7 designated systems, one shared meaning; 5 years of managed, phased transition; 16 formal stakeholder submissions shaped the draft.">
-      <p><strong>Governance chain:</strong></p>
-      <img class="source-figure" src="images/sa-terminology-structure.png" alt="Diagram: Minister of Health leads to National Health Council (section 22 of the Act), leads to NHISSA Committee (national health information system), leads to Clinical Coding Advisory TWG (advisory committee under section 91, reg 8), which connects to the National Terminological Mapping Service (reg 9) via HNSF Interoperability stakeholders, to five workstreams (WS1 ICD-11, WS2 ICHI + LOINC, WS3 ICF, WS4 ATC/DDD + GMDN, WS5 SNOMED CT), and dashed-line to implementing actors (Provinces, Private sector, Academia, Council for Medical Schemes, Statistics South Africa). Caption: advice flows up, coordination flows down, implementation is decentralised (chapters 3 to 5 of the Act).">
+      <h2>Kenya &amp; Brazil: What Success Looks Like</h2>
+      <p>Two countries that have already climbed this ladder — with named governance, published content, and live technology serving real transactions, not just a plan.</p>
+      <table class="slide-table">
+        <thead>
+          <tr><th>Building block</th><th>Kenya (KNHTS)</th><th>Brazil (RNDS)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Technology</td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> Public OCL-based platform</li>
+                <li><input type="checkbox" checked disabled> Real-time API + browser search</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> One national FHIR terminology API</li>
+                <li><input type="checkbox" checked disabled> Real-time translate/validate at scale</li>
+                <li><input type="checkbox" checked disabled> AI-assisted mapping tooling</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>Content</td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> ICD-11, SNOMED CT, LOINC, ATC</li>
+                <li><input type="checkbox" checked disabled> CIEL-based interface terminology</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> 69 national CodeSystems published</li>
+                <li><input type="checkbox" checked disabled> Native ICD-10/LOINC/billing-code mappings</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>Governance</td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> DG-chaired advisory committee</li>
+                <li><input type="checkbox" checked disabled> Chief Terminologist + review teams</li>
+                <li><input type="checkbox" checked disabled> Published SOPs to add/retire concepts</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> Four-pillar policy→execution model</li>
+                <li><input type="checkbox" checked disabled> Automated "unmatched" governance loop</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <td>Community &amp; use</td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> Free, public resource</li>
+                <li><input type="checkbox" checked disabled> Seats for academia &amp; regulators</li>
+              </ul>
+            </td>
+            <td>
+              <ul class="checklist">
+                <li><input type="checkbox" checked disabled> Named national coalition</li>
+                <li><input type="checkbox" checked disabled> Powers a live national data exchange</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="subtitle">Every checkmark here started as an open question — the same ones on the table for South Africa today.</p>
       <details class="notes-panel">
         <summary>Speaker notes ▾</summary>
         <div class="notes-content">
-          Added 2026-08-05. Source: Robin Dyers, Clinical Coding Advisory TWG, "The Semantic Layer of Health Interoperability," AeHIN Digital Health Convergence Workshop, July 2026 — figures reproduced directly from the source deck. Confirm with Carl whether naming the TWG/regulation numbers this specifically is fine for this audience, or should stay at "a national committee" level.
+          Kenya: KE-NHDD Governance Framework (Kenya Ministry of Health, Dec 2023) — the service was known as the Kenya National Health Data Dictionary (KE-NHDD) at the time of this framework, now the Kenya National Health Terminology Service (KNHTS). Health Sector Terminology Advisory Committee chaired by the Director-General, Chief Terminologist as steward/approver, Technical Review and Technical Support Teams, Secretariat handling requests and utilization tracking; anchored in the Health Act 2017 and Kenya Health Policy 2014–2030. Brazil: HL7 International Rotterdam WGM presentation (May 2026) — RNDS holds 4.6B+ records across 8 record types; OCL + FHIRSmith execute $lookup/$expand/$translate/$validate-code; OBM (national medication ontology) uses an "Unmatched" tag to auto-route ungoverned local codes into governance review; a JAMIA-published evaluation of the AI mapping assistant shows 86% top-10 recall.
         </div>
       </details>
     </section>
 
     <!-- 21 -->
     <section class="slide" data-section="Section 6 · Obj. 5" data-objective="Objective 5">
-      <div class="eyebrow">Section 6 · Objective 5</div>
       <h2>What's Still Open — and How to Get Involved</h2>
       <div class="icon-grid two-col">
         <div class="icon-item"><span class="icon-glyph">📋</span><span class="icon-text">Inventory<span class="icon-sub">7 designated systems, nationally — local/facility inventory still unconfirmed</span></span></div>
@@ -706,7 +755,6 @@
 
     <!-- 22 -->
     <section class="slide" data-section="Section 7 · Q&A" data-objective="">
-      <div class="eyebrow">Section 7 · Knowledge check</div>
       <h2>Knowledge Check</h2>
       <p><strong>Priority questions:</strong></p>
       <ol>
@@ -717,13 +765,27 @@
 
     <!-- 23 -->
     <section class="slide" data-section="Closing" data-objective="">
-      <div class="eyebrow">Thank you</div>
       <h2>Thank You</h2>
       <p>Today: what a terminology service does, how SNOMED CT/ICD-11/LOINC relate, how localization works in both directions, South Africa's own designated systems and governance structure, and the four building blocks of a well-governed national terminology system.</p>
       <div class="quote-block">
         We'd love your feedback on today's session.
         <span class="quote-src">Feedback survey link: TBD — reuse the series-standard survey once confirmed (see agenda for this session).</span>
       </div>
+    </section>
+
+    <!-- 24 -->
+    <section class="slide" data-hidden="true" data-section="Section 6 · Obj. 5 · Appendix" data-objective="Objective 5">
+      <h2>South Africa's Structure, in Detail</h2>
+      <p>Backup slide — same governance-chain and stat detail as before, kept here for Q&amp;A rather than the main flow.</p>
+      <img class="source-figure" src="images/bignumbers.png" alt="Three stat cards: 7 designated systems, one shared meaning; 5 years of managed, phased transition; 16 formal stakeholder submissions shaped the draft.">
+      <p><strong>Governance chain:</strong></p>
+      <img class="source-figure" src="images/sa-terminology-structure.png" alt="Diagram: Minister of Health leads to National Health Council (section 22 of the Act), leads to NHISSA Committee (national health information system), leads to Clinical Coding Advisory TWG (advisory committee under section 91, reg 8), which connects to the National Terminological Mapping Service (reg 9) via HNSF Interoperability stakeholders, to five workstreams (WS1 ICD-11, WS2 ICHI + LOINC, WS3 ICF, WS4 ATC/DDD + GMDN, WS5 SNOMED CT), and dashed-line to implementing actors (Provinces, Private sector, Academia, Council for Medical Schemes, Statistics South Africa). Caption: advice flows up, coordination flows down, implementation is decentralised (chapters 3 to 5 of the Act).">
+      <details class="notes-panel">
+        <summary>Speaker notes ▾</summary>
+        <div class="notes-content">
+          Hidden from the main flow (not counted in Next/Prev or the slide counter) — reachable via the sidebar if a question calls for this level of detail. Source: Robin Dyers, Clinical Coding Advisory TWG, "The Semantic Layer of Health Interoperability," AeHIN Digital Health Convergence Workshop, July 2026 — figures reproduced directly from the source deck. Confirm with Carl whether naming the TWG/regulation numbers this specifically is fine for this audience, or should stay at "a national committee" level.
+        </div>
+      </details>
     </section>
 
   </main>
@@ -788,16 +850,21 @@
     return c.status === 'addressed' ? 'badge-addressed' : 'badge-open';
   }
 
+  function isHidden(i){ return slides[i].dataset.hidden === 'true'; }
+  function visibleIndices(){ return slides.map((s,i)=>i).filter(i => !isHidden(i)); }
+
   function buildSidebar(){
     const list = document.getElementById('sidebarList');
     list.innerHTML = '';
     slides.forEach((s, i) => {
+      const hidden = isHidden(i);
       const li = document.createElement('li');
-      li.className = 'sidebar-item' + (i===current ? ' active' : '');
+      li.className = 'sidebar-item' + (i===current ? ' active' : '') + (hidden ? ' sidebar-item-hidden' : '');
       const badge = document.createElement('span');
       badge.className = 'badge ' + badgeClass(i);
       const label = document.createElement('span');
-      label.innerHTML = '<span class="sidebar-num">' + (i+1) + '.</span> ' + slideTitle(i);
+      label.innerHTML = '<span class="sidebar-num">' + (i+1) + '.</span> ' + slideTitle(i) +
+        (hidden ? ' <span class="hidden-tag">(hidden)</span>' : '');
       li.appendChild(badge);
       li.appendChild(label);
       li.addEventListener('click', () => goTo(i));
@@ -814,8 +881,12 @@
 
   function render(){
     slides.forEach((s,i) => s.classList.toggle('active', i===current));
-    document.getElementById('navCounter').textContent = (current+1) + ' / ' + slides.length;
-    document.getElementById('progressFill').style.width = (((current+1)/slides.length)*100) + '%';
+
+    const vis = visibleIndices();
+    const visPos = vis.indexOf(current);
+    const onHidden = visPos === -1;
+    document.getElementById('navCounter').textContent = onHidden ? 'Appendix' : ((visPos+1) + ' / ' + vis.length);
+    document.getElementById('progressFill').style.width = onHidden ? '100%' : (((visPos+1)/vis.length)*100) + '%';
 
     const s = slides[current];
     document.getElementById('sectionTag').textContent = s.dataset.section || '';
@@ -829,14 +900,24 @@
 
     buildSidebar();
     updateSummary();
-    document.getElementById('prevBtn').disabled = current === 0;
-    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+    // Hidden slides (e.g. an appendix) sit after the last visible slide and are reached only
+    // via the sidebar, not Next/Prev — Prev still walks back into the visible deck from there.
+    document.getElementById('prevBtn').disabled = onHidden ? false : (visPos === 0);
+    document.getElementById('nextBtn').disabled = onHidden ? true : (visPos === vis.length - 1);
     document.getElementById('stageWrap').scrollTop = 0;
   }
 
   function goTo(i){ current = Math.max(0, Math.min(slides.length - 1, i)); render(); }
-  function next(){ goTo(current + 1); }
-  function prev(){ goTo(current - 1); }
+  function next(){
+    const vis = visibleIndices();
+    const pos = vis.indexOf(current);
+    goTo(pos === -1 ? vis[0] : vis[Math.min(pos + 1, vis.length - 1)]);
+  }
+  function prev(){
+    const vis = visibleIndices();
+    const pos = vis.indexOf(current);
+    goTo(pos === -1 ? vis[vis.length - 1] : vis[Math.max(pos - 1, 0)]);
+  }
 
   let saveTimer = null;
   function scheduleSave(){
