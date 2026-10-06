@@ -6,6 +6,7 @@ Published slide decks, served via GitHub Pages at [jamlung-ri.github.io/present]
 
 - `index.html` — landing page listing all decks. Add a new `<a class="card">` block here for each new deck.
 - `terminology-services-lnl.html` — Terminology Management and Terminology Services (DHU Lunch & Learn, GF South Africa), first-draft slides with per-slide commenting for review.
+- `build-the-network.html` — Build the Network (ZIMAM workshop opening activity), draft concept with an interactive walkthrough for tables of 6 to 8.
 - `images/` — shared assets (Regenstrief logo marks, source figures embedded in decks).
 
 ## Adding a new deck

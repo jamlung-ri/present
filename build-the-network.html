@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build the Network (Envelopes)</title>
+<style>
+  :root {
+    --bg: #f6f3ee;
+    --surface: #ffffff;
+    --surface-2: #efeae2;
+    --ink: #1f2a30;
+    --muted: #5d6a72;
+    --line: #d9d2c6;
+    --accent: #0f6e6a;
+    --accent-soft: #d9efec;
+    --warn: #b4472f;
+    --warn-soft: #f8e2db;
+    --ok: #2f7d4a;
+    --ok-soft: #dff1e4;
+    --c-champion: #c2571a;
+    --c-rival: #b03a3a;
+    --c-legacy: #6b4fa8;
+    --c-keeper: #8a6d00;
+    --c-guardian: #a8326b;
+    --c-expert: #2f7d4a;
+    --c-convener: #1d6fb8;
+    --c-system: #55616a;
+    --c-hospital: #0f7a8a;
+    --c-insurer: #7a5a2b;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151b1f;
+      --surface: #1e262b;
+      --surface-2: #273137;
+      --ink: #e9eef0;
+      --muted: #9fadb5;
+      --line: #36434a;
+      --accent: #58c7bf;
+      --accent-soft: #173b3a;
+      --warn: #f08a70;
+      --warn-soft: #43231b;
+      --ok: #72c98f;
+      --ok-soft: #1b3a26;
+      --c-champion: #f0925a;
+      --c-rival: #f08080;
+      --c-legacy: #a892e6;
+      --c-keeper: #dcc04a;
+      --c-guardian: #ea7fb0;
+      --c-expert: #72c98f;
+      --c-convener: #6cb2f0;
+      --c-system: #a5b2ba;
+      --c-hospital: #5fc6d6;
+      --c-insurer: #d1ab72;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151b1f;
+    --surface: #1e262b;
+    --surface-2: #273137;
+    --ink: #e9eef0;
+    --muted: #9fadb5;
+    --line: #36434a;
+    --accent: #58c7bf;
+    --accent-soft: #173b3a;
+    --warn: #f08a70;
+    --warn-soft: #43231b;
+    --ok: #72c98f;
+    --ok-soft: #1b3a26;
+    --c-champion: #f0925a;
+    --c-rival: #f08080;
+    --c-legacy: #a892e6;
+    --c-keeper: #dcc04a;
+    --c-guardian: #ea7fb0;
+    --c-expert: #72c98f;
+    --c-convener: #6cb2f0;
+    --c-system: #a5b2ba;
+    --c-hospital: #5fc6d6;
+    --c-insurer: #d1ab72;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  main { max-width: 940px; margin: 0 auto; padding: 32px 16px 80px; }
+  h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.1; margin: 12px 0 8px; letter-spacing: -0.02em; }
+  h1 small { font-size: 0.5em; font-weight: 600; color: var(--accent); letter-spacing: 0; white-space: nowrap; }
+  h2 { font-size: 1.5rem; margin: 56px 0 8px; letter-spacing: -0.01em; }
+  h3 { font-size: 1.05rem; margin: 0 0 4px; }
+  p { margin: 0 0 14px; }
+  a { color: var(--accent); }
+  .lede { font-size: 1.2rem; color: var(--muted); max-width: 46em; }
+  .sub { color: var(--muted); max-width: 46em; }
+  .chip {
+    display: inline-block; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+    background: var(--warn-soft); color: var(--warn);
+  }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 24px 0 0; }
+  .fact { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .fact b { display: block; font-size: 1.35rem; }
+  .fact span { color: var(--muted); font-size: 0.9rem; }
+
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 16px; counter-reset: r; }
+  .grid3 > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .grid3.num > div::before {
+    counter-increment: r; content: counter(r); display: block; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: var(--surface); font-weight: 700; text-align: center; line-height: 30px; margin-bottom: 8px;
+  }
+  .grid3 p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+  /* cards */
+  .card {
+    display: inline-flex; flex-direction: column; flex: 0 0 auto;
+    width: 58px; background: var(--surface); border: 2px solid var(--owner, var(--line));
+    border-radius: 8px; overflow: hidden;
+  }
+  .card .own {
+    font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+    text-align: center; color: var(--surface); background: var(--owner, var(--muted)); padding: 1px 0 2px;
+    white-space: nowrap;
+  }
+  .card .ends { display: flex; }
+  .card .end { flex: 1; text-align: center; font-size: 1.2rem; line-height: 36px; height: 36px; font-weight: 700; }
+  .card .end + .end { border-left: 1px dashed var(--line); }
+  .card .end.num { font-family: Consolas, "Courier New", monospace; color: var(--c-legacy); }
+  .card.blank { border-style: dashed; }
+  .card.blank .end { color: var(--muted); font-weight: 400; font-size: 0.9rem; }
+
+  .switch {
+    position: sticky; top: 0; z-index: 5; margin: 24px -16px 0; padding: 10px 16px;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .switch .lbl { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+  .seg button { border: 0; border-radius: 0; background: transparent; padding: 8px 16px; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+  .switch .now { font-size: 0.9rem; color: var(--muted); }
+  .role.off { opacity: 0.42; }
+  .role .top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px, 1fr)); gap: 12px; margin-top: 16px; }
+  .role {
+    background: var(--surface); border: 1px solid var(--line); border-left: 6px solid var(--owner);
+    border-radius: var(--radius); padding: 14px 16px;
+  }
+  .role .rule { margin: 4px 0 8px; }
+  .role .means { font-size: 0.9rem; color: var(--muted); margin: 0; }
+  .role .means b { color: var(--ink); font-weight: 600; }
+
+  /* tables explorer */
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+  .tabs button { padding: 8px 14px; font-size: 0.9rem; }
+  .tabs button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+  button {
+    font: inherit; font-weight: 600; padding: 9px 18px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  }
+  button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-top: 10px; overflow: hidden; }
+  .panel-head { padding: 14px 16px; background: var(--surface-2); border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+  .panel-head h3 { font-size: 1.25rem; margin: 0; }
+  .verdict { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; }
+  .verdict.fail { background: var(--warn-soft); color: var(--warn); }
+  .verdict.win { background: var(--ok-soft); color: var(--ok); }
+  .panel-body { padding: 16px; }
+  .label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+  .label:first-child { margin-top: 0; }
+  .diff { margin: 0; max-width: 44em; }
+  .table-area {
+    background: var(--surface-2); border-radius: 10px; padding: 14px; min-height: 88px;
+    display: flex; align-items: center; gap: 3px; overflow-x: auto;
+  }
+  .table-area .island-gap { flex: 0 0 auto; width: 40px; text-align: center; color: var(--warn); font-size: 0.75rem; font-weight: 700; }
+  .progress { font-size: 0.9rem; color: var(--muted); margin-top: 10px; }
+  .progress b { color: var(--ink); }
+  .hands { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+  .hand { border: 1px solid var(--line); border-left: 5px solid var(--owner); border-radius: 8px; padding: 8px 10px; }
+  .hand.changed { background: var(--warn-soft); }
+  .hand.empty-chair { border-style: dashed; border-left-style: dashed; opacity: 0.75; }
+  .hand .who { font-weight: 600; font-size: 0.9rem; }
+  .hand .note { font-size: 0.8rem; color: var(--muted); min-height: 1.3em; margin: 2px 0 6px; }
+  .hand .held { display: flex; gap: 3px; flex-wrap: wrap; min-height: 20px; }
+  .hand .held .card { width: 48px; }
+  .hand .held .card .end { font-size: 0.95rem; line-height: 26px; height: 26px; }
+  .hand .held .card .own { display: none; }
+  .hand .none { font-size: 0.8rem; color: var(--muted); }
+  blockquote {
+    margin: 0; padding: 12px 16px; border-left: 4px solid var(--accent); background: var(--accent-soft);
+    border-radius: 0 8px 8px 0; max-width: 44em;
+  }
+  .stands { margin: 0; max-width: 44em; }
+  .stands b { color: var(--ink); }
+
+  .scroll { overflow-x: auto; margin-top: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; min-width: 600px; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--surface-2); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  td.when { white-space: nowrap; font-weight: 600; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; margin-top: 16px; }
+  .box { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .box ul { margin: 6px 0 0; padding-left: 20px; }
+  .box li { margin-bottom: 6px; }
+  .check { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+  .check li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 16px 12px 48px; position: relative; }
+  .check li::before { content: "\2713"; position: absolute; left: 16px; top: 10px; font-weight: 700; color: var(--ok); font-size: 1.2rem; }
+  .check span { color: var(--muted); }
+  footer { margin-top: 56px; font-size: 0.85rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+
+  <span class="chip">Draft concept, not yet agreed</span>
+  <h1>Build the Network <small>envelope version</small></h1>
+  <p class="lede">One round, for tables of six, seven or eight. Every table opens an envelope and tries to build the same network. What nobody is told is that the envelopes are different, and only one of them has everything a table needs.</p>
+  <p class="sub">When time is up, each table that fell short tells the room what it did not have. The one table that finished goes last and explains what went right. Between them, the tables name the ingredients of a working terminology programme.</p>
+
+  <div class="facts">
+    <div class="fact"><b>20 min</b><span>one round, then tables report</span></div>
+    <div class="fact"><b>6 to 8</b><span>people per table, in any mix</span></div>
+    <div class="fact"><b>1 envelope</b><span>in the room can be completed</span></div>
+    <div class="fact"><b>5 lessons</b><span>one from each table that falls short</span></div>
+  </div>
+
+  <div class="switch" role="group" aria-label="Table size">
+    <span class="lbl">Show the game for a table of</span>
+    <span class="seg" id="seg">
+      <button data-size="6" aria-pressed="true">6</button>
+      <button data-size="7" aria-pressed="false">7</button>
+      <button data-size="8" aria-pressed="false">8</button>
+    </span>
+    <span class="now" id="now"></span>
+  </div>
+
+  <h2>How it plays</h2>
+  <div class="grid3 num">
+    <div><h3>Open the envelope</h3><p>Each person takes a role card and its chain cards. Role cards are face up and tables may talk, unless their envelope says otherwise.</p></div>
+    <div><h3>Build one chain</h3><p>Cards connect only when the touching ends match, and cards can be turned round. The table wins by laying one chain that uses every card and keeps every role's rule. Six minutes.</p></div>
+    <div><h3>Tell the room</h3><p>Tables that fell short say what they did not have. The table that finished goes last and says what went right.</p></div>
+  </div>
+  <p class="sub" style="margin-top:14px">The secret in this version sits with the table and not the player. Everyone can see the roles at their own table. Nobody knows that the next table was dealt something different.</p>
+
+  <h2>The roles in a complete envelope</h2>
+  <p class="sub">Six roles are the core, and every one holds cards and has one rule. A seventh and eighth player join as extra Champions: owners of systems that already use the shared symbols and are ready to connect. Roles that are not in play at the chosen size are faded.</p>
+  <div class="roles" id="roles"></div>
+
+  <h2>Six tables, six envelopes</h2>
+  <p class="sub">Pick a table to see what was in its envelope, where it stood when time was called, and what it tells the room. Changed seats are shaded.</p>
+  <div class="tabs" id="tabs" role="group" aria-label="Table"></div>
+  <div class="panel">
+    <div class="panel-head"><h3 id="kName"></h3><span class="verdict" id="kVerdict"></span></div>
+    <div class="panel-body">
+      <div class="label">What is different about this envelope</div>
+      <p class="diff" id="kDiff"></p>
+
+      <div class="label">On the table when time is called</div>
+      <div class="table-area" id="kTable"></div>
+      <div class="progress" id="kProgress"></div>
+
+      <div class="label">Who was at the table, and the cards still in hand</div>
+      <div class="hands" id="kHands"></div>
+
+      <div class="label">What the table tells the room</div>
+      <blockquote id="kSays"></blockquote>
+
+      <div class="label">What it stands for</div>
+      <p class="stands" id="kStands"></p>
+    </div>
+  </div>
+
+  <h2>What the room ends up with</h2>
+  <p class="sub">As the tables report, the facilitator writes one line for each on a flip chart. By the time the winning table speaks, the list is already on the wall, and that table had all of it.</p>
+  <ul class="check">
+    <li><b>A map between code systems.</b> <span>Systems that use different codes do not connect by themselves.</span></li>
+    <li><b>Someone keeping the map current.</b> <span>A map that is out of date connects nothing.</span></li>
+    <li><b>A forum where people can ask.</b> <span>A map nobody can ask for is as good as no map.</span></li>
+    <li><b>Every system at the table.</b> <span>A missing stakeholder leaves a gap nobody else can fill.</span></li>
+    <li><b>One agreed standard.</b> <span>Two standards that each expect to be adopted cannot both lead.</span></li>
+  </ul>
+  <p class="sub" style="margin-top:16px">The closing question for the room: <b>which envelope is your country holding today?</b> Nobody has to answer aloud. It is the question the two days are built to help with.</p>
+
+  <h2>How it feeds the two days</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>When</th><th>Session</th><th>What the game set up</th></tr></thead>
+      <tbody>
+        <tr><td class="when">Day 1, opening</td><td>Readiness survey</td><td>The five lines on the flip chart are a plain-language readiness check. The survey asks the same things about each participant's own system.</td></tr>
+        <tr><td class="when">Day 1, morning</td><td>Health Data Governance, Broadly</td><td>The silent table had every card it needed and still could not finish.</td></tr>
+        <tr><td class="when">Day 1, morning</td><td>From Governance to Terminology</td><td>The out-of-date map: who is staffed and funded to keep it current?</td></tr>
+        <tr><td class="when">Day 1, afternoon</td><td>Use case deep-dives</td><td>The empty chair: who has to be in the room for insurance and referral data to connect?</td></tr>
+        <tr><td class="when">Day 2, morning</td><td>Upstream Terminology Services</td><td>The two champions: one shared source that everyone draws from.</td></tr>
+        <tr><td class="when">Day 2, morning</td><td>Downstream Mapping</td><td>The table with blank translators: what a map is and what it takes to make one.</td></tr>
+        <tr><td class="when">Day 2, afternoon</td><td>Milestone Planning and Roadmap</td><td>The flip chart list becomes the checklist each participant plans against.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Running it</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>Minutes</th><th>What happens</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="when">0 to 3</td><td>Brief the room, hand out envelopes</td><td>People introduce themselves at their table as they take a role: name, country, real job.</td></tr>
+        <tr><td class="when">3 to 9</td><td>One round</td><td>Do not hint that the envelopes differ. Tables that are stuck should stay stuck.</td></tr>
+        <tr><td class="when">9 to 16</td><td>Tables report</td><td>About a minute each. Tables that fell short go first. Write one line per table on the flip chart.</td></tr>
+        <tr><td class="when">16 to 20</td><td>The winning table, then the reveal</td><td>The table that finished says what it had. Then tell the room the envelopes were different on purpose.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two">
+    <div class="box">
+      <h3>Practical points</h3>
+      <ul>
+        <li>Hand out envelopes at random and mix countries at each table, so no delegation is the one that "failed" or "won".</li>
+        <li>Tables of different sizes can play side by side. Every envelope exists in a six, seven and eight-person form, and the same thing is missing at each size.</li>
+        <li>The empty-chair envelope seats one fewer, so give it to the smallest table.</li>
+        <li>With more than six tables, repeat one of the incomplete envelopes. With fewer, drop one. Keep exactly one complete envelope.</li>
+        <li>Say clearly at the reveal that no table failed through its own doing.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Still to settle</h3>
+      <ul>
+        <li>Whether six minutes is enough for the complete table to finish. If it runs out of time, the report still works: ask what it had that others did not.</li>
+        <li>Whether a rigged game suits a room of executives. The reveal has to land as a shared joke.</li>
+        <li>Whether funding should be one of the envelopes. This version leaves it out.</li>
+        <li>One playtest of the complete envelope and one of an incomplete one.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>Concept sketch for facilitator discussion. The decks shown here are worked examples.</footer>
+</main>
+
+<script>
+const SYM = { star: "★", diamond: "◆", square: "■", triangle: "▲", circle: "●", cross: "✚" };
+
+const ROLE = {
+  champion: { name: "Local Champion", tag: "Champion", color: "var(--c-champion)",
+    rule: "Others connect to your star. Only the star end of your cards may touch another card.",
+    means: "Local codes that already work. Others are welcome to adopt them, and the team will not change them." },
+  legacy: { name: "Legacy System", tag: "Legacy", color: "var(--c-legacy)",
+    rule: "Your cards use numbers. They only match other numbers.",
+    means: "An older system whose data does not fit anyone else's." },
+  guardian: { name: "Data Guardian", tag: "Guardian", color: "var(--c-guardian)",
+    rule: "Lay a card only next to a translator.",
+    means: "Privacy and sovereignty: data moves only through an agreed gateway." },
+  keeper: { name: "Translator Keeper", tag: "Keeper", color: "var(--c-keeper)",
+    rule: "You hold the translator cards. Lay one only when someone asks you out loud.",
+    means: "Mapping is real work that happens when someone asks for it." },
+  expert: { name: "Quiet Expert", tag: "Expert", color: "var(--c-expert)",
+    rule: "You hold a picture of the finished chain. Show it only if someone asks you directly.",
+    means: "Scarce terminology expertise that is rarely asked." },
+  convener: { name: "Convener", tag: "Convener", color: "var(--c-convener)",
+    rule: "You speak first. Ask each person to read their rule aloud before any card is laid.",
+    means: "Governance: the one seat whose job is the whole table." },
+  rival: { name: "Second Champion", tag: "Champion 2", color: "var(--c-rival)",
+    rule: "Others connect to your star. Only the star end of your cards may touch another card.",
+    means: "A second standard that also expects to be the one everyone adopts." },
+  hospital: { name: "Hospital Champion", tag: "Hospital", color: "var(--c-hospital)", seat: 7,
+    rule: "Your system already uses the shared symbols. Your cards have no restriction.",
+    means: "A willing partner. Being ready to connect is not enough if the rest of the network is not." },
+  insurer: { name: "Insurer Champion", tag: "Insurer", color: "var(--c-insurer)", seat: 8,
+    rule: "Your system already uses the shared symbols. Your cards have no restriction.",
+    means: "A second willing partner, waiting on the same missing piece as everyone else." },
+  system: { name: "Partner System", tag: "Partner", color: "var(--c-system)",
+    rule: "Your cards have no restriction.",
+    means: "A system that is ready and willing to connect." }
+};
+const COMPLETE_ROLES = ["champion", "legacy", "guardian", "keeper", "expert", "convener", "hospital", "insurer"];
+
+// Card ends, left and right. N cards are blank. X cards are translators with the wrong numbers.
+const CARDS = {
+  C1: ["triangle", "star"], C2: ["star", "square"],
+  L1: ["2", "1"], L2: ["4", "3"],
+  T1: ["1", "star"], T2: ["triangle", "2"], T3: ["3", "square"], T4: ["circle", "4"],
+  D1: ["square", "triangle"], D2: ["star", "circle"],
+  Q1: ["star", "cross"], Q2: ["diamond", "star"],
+  V1: ["cross", "triangle"], V2: ["triangle", "diamond"],
+  H1: ["cross", "cross"], H2: ["diamond", "diamond"],
+  I1: ["circle", "circle"], I2: ["triangle", "triangle"],
+  N1: ["", ""], N2: ["", ""], N3: ["", ""], N4: ["", ""],
+  X1: ["5", "star"], X2: ["triangle", "6"], X3: ["7", "square"], X4: ["circle", "8"]
+};
+
+const BASE = [
+  { role: "champion", cards: ["C1", "C2"] },
+  { role: "legacy", cards: ["L1", "L2"] },
+  { role: "guardian", cards: ["D1", "D2"] },
+  { role: "keeper", cards: ["T1", "T2", "T3", "T4"] },
+  { role: "expert", cards: ["Q1", "Q2"] },
+  { role: "convener", cards: ["V1", "V2"] },
+  { role: "hospital", cards: ["H1", "H2"], min: 7 },
+  { role: "insurer", cards: ["I1", "I2"], min: 8 }
+];
+function seats(change) {
+  return BASE.map(s => change[s.role] ? Object.assign({ changed: true }, s, change[s.role]) : s);
+}
+// What one envelope looks like at a given table size: seats in play, who owns each card, and the table state.
+function view(kit, size) {
+  const inPlay = kit.seats.filter(s => !s.min || s.min <= size);
+  const owner = {};
+  inPlay.forEach(s => s.cards.forEach(id => { owner[id] = s.role; }));
+  const state = kit.state.map(isl => isl.filter(id => owner[id])).filter(isl => isl.length);
+  return { inPlay, owner, state };
+}
+
+const KITS = [
+  { id: "nomap", name: "The table with no map", win: false,
+    seats: seats({ keeper: { cards: ["N1", "N2", "N3", "N4"], note: "Translator cards are blank" } }),
+    diff: "The Translator Keeper is at the table, and all four translator cards are blank. Nobody ever made them.",
+    state: [["C1", "Q1", "H1", "V1", "I2", "V2", "H2", "Q2", "C2"], ["L1"], ["L2"]],
+    says: "The systems that already used the same symbols connected in two minutes. The numbered cards fit nothing, and the Guardian could not lay a card at all. We had someone whose job was translators, and nothing for them to translate with.",
+    line: "A map between code systems",
+    stands: "A terminology unit that exists on paper, with no maps and no tools. The systems that already agree connect, and everything else stays outside." },
+  { id: "stale", name: "The table with an out-of-date map", win: false,
+    seats: seats({ keeper: { cards: ["X1", "X2", "X3", "X4"], note: "Translators carry numbers 5 to 8" } }),
+    diff: "The translator cards are real, and they point to numbers 5, 6, 7 and 8. The Legacy System's cards use 1, 2, 3 and 4.",
+    state: [["C1", "Q1", "H1", "V1", "I2", "X2"], ["X3", "D1", "V2", "H2", "Q2", "C2"], ["X1", "D2", "I1", "X4"], ["L1"], ["L2"]],
+    says: "We laid every card and ended up with five separate pieces. The translators connected to all the shapes. They just did not connect to the numbers our old system actually uses.",
+    line: "Someone keeping the map current",
+    stands: "A map that was built once and never maintained. The source system moved on and the map did not follow." },
+  { id: "silent", name: "The table that could not talk", win: false,
+    seats: seats({ convener: { role: "system", note: "No Convener at this table" } }),
+    tableRule: "A slip in the envelope says: this table works in silence.",
+    diff: "There is no Convener. The seat is a Partner System with the same two cards, and a slip in the envelope tells the table to work in silence.",
+    state: [["C1", "Q1", "H1", "V1", "I2", "V2", "H2", "Q2", "C2"], ["L1"], ["L2"]],
+    says: "We had every card. The Keeper was holding four good translators the whole time and could only lay one if asked out loud. Nobody was allowed to ask.",
+    line: "A forum where people can ask",
+    stands: "No governance forum. The pieces exist in different offices and there is no place where one can ask the other. This table finished exactly where the table with no map did." },
+  { id: "chair", name: "The table with an empty chair", win: false,
+    seats: seats({ guardian: { cards: [], absent: true, note: "Not invited. Their two cards are not in the envelope." } }),
+    diff: "One chair is empty. The Data Guardian was never invited, and the Guardian's two cards are not in the envelope.",
+    state: [["C1", "Q1", "H1", "V1", "I2", "T2", "L1", "T1"], ["I1", "T4", "L2", "T3"], ["V2", "H2", "Q2", "C2"]],
+    says: "We got to three pieces with two gaps between them. We could say exactly which two cards we needed, a star with a circle and a square with a triangle. Nobody at our table had them.",
+    line: "Every system at the table",
+    stands: "A stakeholder who was left out of the room, such as the privacy office, the private hospitals or the insurer. Their part cannot be supplied by anyone else." },
+  { id: "rivals", name: "The table with two champions", win: false,
+    seats: seats({ expert: { role: "rival", note: "A second Champion in place of the Expert" } }),
+    diff: "There is no Quiet Expert. That seat is a second Local Champion with the same two cards and the same rule: only the star end may touch another card.",
+    state: [["C1", "Q1"], ["H1", "V1", "I2", "T2", "L1", "T1", "D2", "I1", "T4", "L2", "T3", "D1", "V2", "H2"], ["Q2", "C2"]],
+    says: "We built one long chain in the middle. Then we had four cards that all had to be at an end, and a chain only has two ends. The two Champions connected to each other and to nothing else.",
+    line: "One agreed standard",
+    stands: "Two standards that each expect everyone else to adopt them. Each will connect on its own terms, so neither joins the network." },
+  { id: "complete", name: "The table that finished", win: true,
+    seats: BASE,
+    diff: "Nothing is different. This is the complete envelope: every role, working translators, a Convener who gets the rules read aloud, and an Expert with the picture.",
+    state: [["C1", "Q1", "H1", "V1", "T2", "L1", "T1", "D2", "I1", "T4", "L2", "T3", "D1", "I2", "V2", "H2", "Q2", "C2"]],
+    says: "Our Convener had everyone read their rule before we touched a card. Someone asked the Expert for the picture. After that we asked the Keeper for each translator as we needed it. We thought the game was easy until we heard the other tables.",
+    line: "",
+    stands: "A programme with all five ingredients in place. The table was no smarter than the others. It was better equipped." }
+];
+
+function endHtml(v) {
+  if (v === "") return '<span class="end">?</span>';
+  const isNum = !(v in SYM);
+  return '<span class="end' + (isNum ? " num" : "") + '">' + (isNum ? v : SYM[v]) + "</span>";
+}
+function cardHtml(tok, role) {
+  const flip = tok.endsWith("~"), id = flip ? tok.slice(0, -1) : tok;
+  const c = CARDS[id], r = ROLE[role];
+  const a = flip ? c[1] : c[0], b = flip ? c[0] : c[1];
+  return '<span class="card' + (id[0] === "N" ? " blank" : "") + '" style="--owner:' + r.color + '" title="' + r.name + '">' +
+    '<span class="own">' + r.tag + "</span>" +
+    '<span class="ends">' + endHtml(a) + endHtml(b) + "</span></span>";
+}
+
+const $ = id => document.getElementById(id);
+
+let k = 0, size = 6;
+
+function renderRoles() {
+  $("roles").innerHTML = COMPLETE_ROLES.map(id => {
+    const r = ROLE[id];
+    const badge = r.seat ? "Seat " + r.seat : "Core";
+    return '<div class="role' + (r.seat > size ? " off" : "") + '" style="--owner:' + r.color + '">' +
+      '<div class="top"><h3>' + r.name + '</h3><span class="badge">' + badge + "</span></div>" +
+      '<p class="rule">' + r.rule + '</p><p class="means"><b>Stands for:</b> ' + r.means + "</p></div>";
+  }).join("");
+  const full = view(KITS[KITS.length - 1], size);
+  $("now").textContent = full.inPlay.length + " roles, " + Object.keys(full.owner).length + " cards in a complete envelope";
+  document.querySelectorAll("#seg button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.size === size)));
+}
+
+$("tabs").innerHTML = KITS.map((kit, n) =>
+  '<button data-k="' + n + '" aria-pressed="false">Table ' + (n + 1) + "</button>").join("");
+
+function render() {
+  const kit = KITS[k];
+  const v = view(kit, size), owner = v.owner;
+  const laid = v.state.flat();
+  const total = Object.keys(owner).length;
+
+  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.k === k)));
+  $("kName").textContent = "Table " + (k + 1) + ": " + kit.name;
+  $("kVerdict").textContent = kit.win ? "Finished" : "Fell short";
+  $("kVerdict").className = "verdict " + (kit.win ? "win" : "fail");
+  $("kDiff").textContent = kit.diff;
+
+  $("kTable").innerHTML = v.state.map(isl => isl.map(t => cardHtml(t, owner[t])).join(""))
+    .join('<span class="island-gap">gap</span>');
+  const n = v.state.length;
+  $("kProgress").innerHTML = "<b>" + laid.length + " of " + total + "</b> cards on the table, in <b>" +
+    (n === 1 ? "one chain" : n + " separate pieces") + "</b>";
+
+  $("kHands").innerHTML = v.inPlay.map(s => {
+    const r = ROLE[s.role];
+    const held = s.cards.filter(id => !laid.includes(id));
+    const cards = s.absent ? "" : held.length ? held.map(id => cardHtml(id, s.role)).join("")
+      : '<span class="none">all cards on the table</span>';
+    return '<div class="hand' + (s.changed ? " changed" : "") + (s.absent ? " empty-chair" : "") + '" style="--owner:' + r.color + '">' +
+      '<div class="who">' + r.name + '</div><div class="note">' + (s.note || "") + "</div>" +
+      '<div class="held">' + cards + "</div></div>";
+  }).join("");
+
+  $("kSays").textContent = "“" + kit.says + "”";
+  $("kStands").innerHTML = (kit.line ? "<b>Line for the flip chart:</b> " + kit.line + ". " : "") + kit.stands;
+}
+
+document.querySelectorAll("#tabs button").forEach(b => b.addEventListener("click", () => { k = +b.dataset.k; render(); }));
+document.querySelectorAll("#seg button").forEach(b => b.addEventListener("click", () => { size = +b.dataset.size; renderRoles(); render(); }));
+renderRoles();
+render();
+</script>
+</body>
+</html>
