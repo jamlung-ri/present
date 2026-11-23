@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Joe Amlung 2026 Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column (max 1040px). Visual first: stat strip, month-by-project heat grid, compact tiles, roles grid, fit table. Regenstrief brand palette. */
+:root{
+  --bg:#f7f9f9; --surface:#ffffff; --fg:#2d3137; --muted:#5b646c; --line:#dae2e3;
+  --navy:#0e5088; --azure:#0f8fbf; --green:#2f8a3e; --orange:#c76a0e; --purple:#574e8e;
+  --navy-soft:#e6eef6; --azure-soft:#e3f4fa; --green-soft:#e7f3ed; --orange-soft:#fbf0e0; --purple-soft:#eeedf5;
+  --h1:#d4e6f4; --h2:#9cc6e6; --h3:#4f97cf; --h4:#1f6aa8; --h5:#0e3f6d; --hfg:#ffffff;
+  --k1:#2f8a3e; --k2:#0f8fbf; --k3:#574e8e; --k4:#c76a0e; --k5:#0e5088; --k6:#7cb342; --k7:#b0577f; --k8:#a6acb1;
+  --font:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171c21; --surface:#20272e; --fg:#e8edf0; --muted:#a3adb5; --line:#334049;
+  --navy:#7fb4e6; --azure:#5ec8ec; --green:#7fd28a; --orange:#f5a55a; --purple:#b2abe0;
+  --navy-soft:#1d3247; --azure-soft:#173a47; --green-soft:#1c3624; --orange-soft:#3d2c17; --purple-soft:#2c2a44;
+  --h1:#1f3448; --h2:#25506f; --h3:#2f6f9c; --h4:#4a93c9; --h5:#8cc3ee; --hfg:#0f1a24;
+  --k1:#6cc47a; --k2:#4fc0e8; --k3:#9d94d6; --k4:#f0a05a; --k5:#6fa8e0; --k6:#b5dc7a; --k7:#e08fb3; --k8:#6b757d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171c21; --surface:#20272e; --fg:#e8edf0; --muted:#a3adb5; --line:#334049;
+  --navy:#7fb4e6; --azure:#5ec8ec; --green:#7fd28a; --orange:#f5a55a; --purple:#b2abe0;
+  --navy-soft:#1d3247; --azure-soft:#173a47; --green-soft:#1c3624; --orange-soft:#3d2c17; --purple-soft:#2c2a44;
+  --h1:#1f3448; --h2:#25506f; --h3:#2f6f9c; --h4:#4a93c9; --h5:#8cc3ee; --hfg:#0f1a24;
+  --k1:#6cc47a; --k2:#4fc0e8; --k3:#9d94d6; --k4:#f0a05a; --k5:#6fa8e0; --k6:#b5dc7a; --k7:#e08fb3; --k8:#6b757d; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:52px}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(1.9rem,4.5vw,2.7rem);font-weight:800;color:var(--navy);letter-spacing:-.01em}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--azure)}
+section{display:grid;gap:18px}
+.sec-head{display:grid;gap:4px}
+.sec-head p{color:var(--muted);font-size:.95rem}
+.note{font-size:.8rem;color:var(--muted)}
+
+/* hero */
+header{display:grid;gap:12px;border-bottom:3px solid var(--navy);padding-bottom:28px}
+.who{font-weight:600}
+.who span{color:var(--muted);font-weight:500}
+.tagline{font-size:clamp(1.3rem,3vw,1.7rem);font-weight:700;color:var(--fg);margin-top:6px}
+.tagline em{font-style:normal;color:var(--azure)}
+.lede{color:var(--muted);max-width:62ch}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:12px}
+.stat{background:var(--surface);padding:14px 16px;display:grid;gap:2px}
+.stat .n{font-size:2rem;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
+.stat .l{font-size:.84rem;color:var(--muted)}
+
+/* heat grid */
+.heatwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px}
+.heat{display:grid;grid-template-columns:minmax(9.5rem,13rem) repeat(11,minmax(34px,1fr)) 3.4rem;gap:4px;min-width:640px;font-size:.84rem;align-items:center}
+.heat .hd{font-size:.72rem;font-weight:700;color:var(--muted);text-align:center;letter-spacing:.04em}
+.heat .hd.l{text-align:left}
+.heat .nm{font-weight:600;padding-right:6px}
+.heat .nm small{display:block;font-weight:500;color:var(--muted);font-size:.72rem}
+.c{height:30px;border-radius:4px;background:var(--bg);display:grid;place-items:center;font-family:var(--mono);font-size:.7rem;color:var(--hfg);font-variant-numeric:tabular-nums}
+.c.l1{background:var(--h1);color:var(--fg)} .c.l2{background:var(--h2);color:var(--fg)} .c.l3{background:var(--h3)} .c.l4{background:var(--h4)} .c.l5{background:var(--h5)}
+.tot{font-family:var(--mono);font-size:.8rem;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.heat .cnt{font-family:var(--mono);font-size:.75rem;text-align:center;color:var(--navy);font-weight:500;border-top:1px solid var(--line);padding-top:6px}
+.scale{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:.78rem;color:var(--muted);margin-top:12px}
+.scale i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+
+/* tiles */
+.groups{display:grid;gap:22px}
+.grp{display:grid;gap:10px}
+.grp-t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-left:5px solid var(--c);padding-left:10px}
+.grp-t h3{font-size:1.08rem}
+.grp-t span{font-size:.82rem;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px;align-content:start;min-width:0}
+.tile p{font-size:.88rem;color:var(--muted)}
+.tile .win{font-size:.86rem;color:var(--fg);font-weight:600}
+.tile .win::before{content:"→ ";color:var(--c)}
+.chip{justify-self:start;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--c);letter-spacing:.02em}
+.hds{--c:var(--navy);--soft:var(--navy-soft)}
+.ocl{--c:var(--azure);--soft:var(--azure-soft)}
+.ghi{--c:var(--green);--soft:var(--green-soft)}
+.osi{--c:var(--purple);--soft:var(--purple-soft)}
+.org{--c:var(--orange);--soft:var(--orange-soft)}
+
+/* how */
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.hw{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--navy);border-radius:10px;padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
+.hw p{font-size:.88rem;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:.72rem;padding:2px 8px;border-radius:5px;background:var(--navy-soft);color:var(--navy);font-weight:600}
+
+/* tables */
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line)}
+thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;vertical-align:bottom;text-align:left}
+tbody tr:last-child td{border-bottom:0}
+.roles{min-width:700px}
+.roles td,.roles th{text-align:center}
+.roles td:first-child,.roles th:first-child{text-align:left;position:sticky;left:0;background:var(--surface);font-weight:600}
+.dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--navy)}
+.dot.half{background:transparent;border:2px solid var(--navy);width:8px;height:8px}
+.fit{min-width:760px}
+.fit td{vertical-align:top}
+.fit .goal b{display:block;font-size:.92rem}
+.fit .goal span{font-family:var(--mono);font-size:.72rem;color:var(--azure)}
+.fit .work{display:flex;flex-wrap:wrap;gap:5px}
+.fit .work .tag{background:var(--green-soft);color:var(--green)}
+.fit .tgt{font-size:.82rem;color:var(--muted)}
+.fit .tgt b{color:var(--fg);font-weight:600}
+.str{font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.str.s{color:var(--green)} .str.m{color:var(--muted)}
+
+/* program breakdown */
+.prog{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:16px}
+.stack{display:flex;height:34px;border-radius:6px;overflow:hidden;gap:2px}
+.stack span{display:block;height:100%}
+.plist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px}
+.pi{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--line);min-width:0}
+.pi i{width:12px;height:12px;border-radius:3px;align-self:center}
+.pi b{font-size:.92rem}
+.pi .h{font-family:var(--mono);font-size:.82rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pi .h small{color:var(--muted)}
+.pi p{grid-column:2 / 4;font-size:.82rem;color:var(--muted)}
+.callout{display:grid;gap:6px;background:var(--green-soft);border-radius:8px;padding:14px 16px}
+.callout b{color:var(--green)}
+.callout p{font-size:.9rem}
+.k1{background:var(--k1)}.k2{background:var(--k2)}.k3{background:var(--k3)}.k4{background:var(--k4)}.k5{background:var(--k5)}.k6{background:var(--k6)}.k7{background:var(--k7)}.k8{background:var(--k8)}
+@media (max-width:820px){.plist{grid-template-columns:1fr}}
+
+.next{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.next .tile p{color:var(--fg)}
+footer{font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+@media (max-width:820px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .how,.next{grid-template-columns:1fr}
+}
+</style>
+
+<style>*{box-sizing:border-box}body{margin:0}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">2026 portfolio · January to November</div>
+  <h1>Joe Amlung, MPH</h1>
+  <p class="who">Senior Technical Advisor <span>· Regenstrief Institute · CBMI · Global Health Informatics</span></p>
+  <p class="tagline">A generalist who <em>goes where the need is.</em></p>
+  <p class="lede">I stay flexible across many projects instead of going deep on one or two. I pick up whatever a team is missing, whether that's governance, research, teaching, a pilot build, or a proposal.</p>
+  <div class="stats">
+    <div class="stat"><span class="n">11</span><span class="l">projects with time logged in 2026</span></div>
+    <div class="stat"><span class="n">7</span><span class="l">projects active at once (September)</span></div>
+    <div class="stat"><span class="n">6</span><span class="l">external funders and partners</span></div>
+    <div class="stat"><span class="n">4</span><span class="l">countries where I presented or represented RI</span></div>
+  </div>
+</header>
+
+<section aria-labelledby="year">
+  <div class="sec-head">
+    <div class="eyebrow">The year at a glance</div>
+    <h2 id="year">Where I went, month by month</h2>
+    <p>Hours logged to each project. New work came in mid-year as older funded lines ended.</p>
+  </div>
+  <div class="heatwrap">
+    <div class="heat" role="table" aria-label="Hours by project and month, 2026">
+      <div class="hd l" role="columnheader">Project</div>
+      <div class="hd">Jan</div><div class="hd">Feb</div><div class="hd">Mar</div><div class="hd">Apr</div><div class="hd">May</div><div class="hd">Jun</div><div class="hd">Jul</div><div class="hd">Aug</div><div class="hd">Sep</div><div class="hd">Oct</div><div class="hd">Nov</div><div class="hd">Total</div>
+
+      <div class="nm">LOINC</div>
+      <div class="c l3">25</div><div class="c l4">42</div><div class="c l3">30</div><div class="c l4">42</div><div class="c l3">26</div><div class="c l3">28</div><div class="c l3">29</div><div class="c l4">53</div><div class="c l4">40</div><div class="c l5">92</div><div class="c l3">25</div><div class="tot">431</div>
+
+      <div class="nm">RI / GHI program <small>OSI</small></div>
+      <div class="c l2">14</div><div class="c l3">28</div><div class="c l2">19</div><div class="c l2">16</div><div class="c l2">13</div><div class="c l2">18</div><div class="c l3">27</div><div class="c l3">24</div><div class="c l3">21</div><div class="c l2">13</div><div class="c l3">30</div><div class="tot">221</div>
+
+      <div class="nm">Suki AI evaluation</div>
+      <div class="c l2">11</div><div class="c l3">27</div><div class="c l3">24</div><div class="c l3">20</div><div class="c l2">16</div><div class="c l3">21</div><div class="c l2">16</div><div class="c"></div><div class="c l1">3</div><div class="c"></div><div class="c l1">1</div><div class="tot">140</div>
+
+      <div class="nm">OCL / CIEL</div>
+      <div class="c"></div><div class="c"></div><div class="c l3">29</div><div class="c l3">30</div><div class="c l3">26</div><div class="c l3">30</div><div class="c l3">20</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="tot">134</div>
+
+      <div class="nm">CHD study</div>
+      <div class="c l2">15</div><div class="c l2">11</div><div class="c l2">11</div><div class="c l2">19</div><div class="c l3">24</div><div class="c l2">14</div><div class="c l2">12</div><div class="c l2">11</div><div class="c l1">8</div><div class="c l1">4</div><div class="c"></div><div class="tot">129</div>
+
+      <div class="nm">FORCE</div>
+      <div class="c l2">16</div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="tot">16</div>
+
+      <div class="new" style="display:contents">
+      <div class="nm">Global Fund S. Africa</div>
+      <div class="c"></div><div class="c"></div><div class="c"></div><div class="c l1">4</div><div class="c l1">4</div><div class="c l1">8</div><div class="c l2">15</div><div class="c l1">7</div><div class="c l1">2</div><div class="c l1">2</div><div class="c"></div><div class="tot">42</div>
+
+      <div class="nm">UNICEF PHIT</div>
+      <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c l2">16</div><div class="c l2">19</div><div class="c l1">4</div><div class="c l1">1</div><div class="tot">40</div>
+
+      <div class="nm">Palladium GHSD</div>
+      <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c l1">9</div><div class="c l2">16</div><div class="c"></div><div class="c"></div><div class="tot">26</div>
+
+      <div class="nm">ZIMAM / World Bank</div>
+      <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c l4">37</div><div class="c l3">20</div><div class="tot">57</div>
+      </div>
+
+      <div class="nm" style="font-size:.76rem;color:var(--muted)">Projects active</div>
+      <div class="cnt">5</div><div class="cnt">4</div><div class="cnt">5</div><div class="cnt">6</div><div class="cnt">6</div><div class="cnt">6</div><div class="cnt">6</div><div class="cnt">6</div><div class="cnt">7</div><div class="cnt">6</div><div class="cnt">5</div><div></div>
+    </div>
+    <div class="scale"><span>Hours per month:</span><span><i style="background:var(--h1)"></i>1 to 9</span><span><i style="background:var(--h2)"></i>10 to 19</span><span><i style="background:var(--h3)"></i>20 to 34</span><span><i style="background:var(--h4)"></i>35 to 59</span><span><i style="background:var(--h5)"></i>60+</span></div>
+  </div>
+  <p class="note">From my daily time log, Jan 1 to Nov 20, 2026 (November is partial). Shows hours charged to each project's code, so early ZIMAM and OCL work charged elsewhere doesn't appear. Another 371 hours of shared time aren't shown.</p>
+</section>
+
+<section aria-labelledby="program">
+  <div class="sec-head">
+    <div class="eyebrow">RI / GHI program funding</div>
+    <h2 id="program">What the program hours paid for</h2>
+    <p>Program time covers work no grant pays for yet: finding new funding, bridging projects between awards, and improving how the Institute works.</p>
+  </div>
+  <div class="prog">
+    <div class="stack" role="img" aria-label="RI/GHI program hours split into seven categories">
+      <span class="k1" style="flex:37"></span><span class="k2" style="flex:37"></span><span class="k3" style="flex:29"></span><span class="k4" style="flex:25"></span><span class="k5" style="flex:17"></span><span class="k6" style="flex:16"></span><span class="k8" style="flex:28"></span>
+    </div>
+    <div class="plist">
+      <div class="pi"><i class="k1"></i><b>Proposals and new business</b><span class="h">37 h <small>20%</small></span><p>WHO and OCL proposal (RI lead), ZIMAM concept note, CDC Ghana, Horizon Europe, South Africa concept note, GHI menu of services</p></div>
+      <div class="pi"><i class="k2"></i><b>OCL between funded lines</b><span class="h">37 h <small>20%</small></span><p>OCL planning and kickoff before its award started, plus showcases, videos and LOINC loads after it ended</p></div>
+      <div class="pi"><i class="k3"></i><b>Contracting process redesign</b><span class="h">29 h <small>15%</small></span><p>Interviews, workflow maps and write-up with the CFO and Grants and Contracts</p></div>
+      <div class="pi"><i class="k4"></i><b>AI enablement and GHI tooling</b><span class="h">25 h <small>13%</small></span><p>"How to AI" talks, CBMI AI support, RI AI conference, GHI workspace and demos</p></div>
+      <div class="pi"><i class="k5"></i><b>Conference talks and relationship building</b><span class="h">17 h <small>9%</small></span><p>HIE Summit talk and terminology panel in Dubai, plus building ties with ZIMAM, the Dubai Health Authority and other attendees</p></div>
+      <div class="pi"><i class="k6"></i><b>Education strategy and communities</b><span class="h">16 h <small>8%</small></span><p>CBMI, GHI and HDS learning models. OpenHIE and OHDSI community work</p></div>
+      <div class="pi"><i class="k8"></i><b>Team and admin</b><span class="h">28 h <small>15%</small></span><p>Reviews, training, onboarding to new tools, team events</p></div>
+    </div>
+    <div class="callout"><b>What came back</b><p>The ZIMAM concept note and outreach (program time, June to September) became a World Bank funded engagement in October. The WHO and OCL proposal is the next one in the pipeline.</p></div>
+  </div>
+  <p class="note">Estimated from my time log: on each day with program hours, I split those hours evenly across that day's work items that weren't charged to another project. Shares are out of the 188 hours that could be matched to an activity this way (of 221 total). Figures are approximate.</p>
+</section>
+
+<section aria-labelledby="projects">
+  <div class="sec-head">
+    <div class="eyebrow">Project portfolio</div>
+    <h2 id="projects">What I did, and what came of it</h2>
+  </div>
+  <div class="groups">
+    <div class="grp hds">
+      <div class="grp-t"><h3>LOINC</h3><span>Health Data Standards · NLM and ONC</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="chip">Designer · builder</span><h3>Change management and governance</h3><p>Change request workflow, decision record, validation rule registry, CAB review portal.</p><p class="win">Went from concept to adopted process in about a month</p></div>
+        <div class="tile"><span class="chip">Core team</span><h3>Operations and releases</h3><p>Weekly term triage, release validation, translations, release notes.</p><p class="win">Drafted the new translation policy (Nov)</p></div>
+        <div class="tile"><span class="chip">Analyst · builder</span><h3>Team reporting</h3><p>Sprint dashboards, a team dashboard pilot, report tracker.</p><p class="win">Pilot settled the reporting tool question (Sep)</p></div>
+        <div class="tile"><span class="chip">Representative</span><h3>Standards community</h3><p>LOINC Conference, Cologne. LOINC booth at SNOMED Expo, Sydney.</p><p class="win">Joined the LOINC and SNOMED meeting in Sydney</p></div>
+      </div>
+    </div>
+    <div class="grp ocl">
+      <div class="grp-t"><h3>Open Concept Lab</h3><span>funded through Aug 1, still supporting</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="chip">Project manager · contributor</span><h3>Product and v3 requirements</h3><p>Sprints, requirements, code, testing. Loaded LOINC 2.82 and 2.83 and CIEL.</p><p class="win">Co-authored a JAMIA paper on automated LOINC mapping (Feb)</p></div>
+        <div class="tile"><span class="chip">Presenter</span><h3>OCL Mapper</h3><p>Mapping Roundtable at the LOINC Conference, Cologne (Oct).</p><p class="win">Co-presented the OCL Mapper update</p></div>
+        <div class="tile"><span class="chip">RI lead</span><h3>WHO and OCL proposal</h3><p>Led the Regenstrief side as the only RI person on the submission.</p><p class="win">Proposal developed November 2026</p></div>
+      </div>
+    </div>
+    <div class="grp ghi">
+      <div class="grp-t"><h3>Global health</h3><span>four funded engagements new in 2026</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="chip">Co-designer · speaker</span><h3>ZIMAM, Dubai</h3><p>Two-day terminology workshop for MENA delegations, a summit talk and a panel. Advised the Dubai Health Authority.</p><p class="win">All 19 survey respondents felt more prepared</p></div>
+        <div class="tile"><span class="chip">Trainer</span><h3>Global Fund South Africa</h3><p>Lunch and learn series for the Department of Health.</p><p class="win">Added a Standards 101 session to fill a gap</p></div>
+        <div class="tile"><span class="chip">Analyst · interviewer</span><h3>UNICEF PHIT</h3><p>Readiness analysis for Fiji, Kiribati, Tonga and Tuvalu.</p><p class="win">Interviews and country profiles</p></div>
+        <div class="tile"><span class="chip">Reviewer</span><h3>Palladium GHSD Toolkit</h3><p>Helped reframe the country transition matrix.</p><p class="win">Dimension review and working sessions</p></div>
+      </div>
+    </div>
+    <div class="grp osi">
+      <div class="grp-t"><h3>Research and innovation</h3><span>OSI · CBMI · Institute-wide</span></div>
+      <div class="tiles">
+        <div class="tile"><span class="chip">Measure designer</span><h3>Suki ambient AI evaluation</h3><p>Measure framework, algorithm cards, Epic feasibility queries.</p><p class="win">Paper in progress</p></div>
+        <div class="tile"><span class="chip">Qualitative lead</span><h3>Congenital heart defects</h3><p>19 interviews, 2,536 coded segments, journey map, student training.</p><p class="win">AHA abstract and poster, paper in progress</p></div>
+        <div class="tile"><span class="chip">Researcher</span><h3>Contracting redesign</h3><p>Customer interviews and workflow maps, with the CFO.</p><p class="win">Current and future-state process</p></div>
+        <div class="tile org"><span class="chip">Teacher</span><h3>AI enablement</h3><p>"How to AI" talks, CBMI support, RI AI conference.</p><p class="win">Talks, demos and one-on-one help</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="how">
+  <div class="sec-head">
+    <div class="eyebrow">Across projects</div>
+    <h2 id="how">How I work, whatever the project</h2>
+  </div>
+  <div class="how">
+    <div class="hw"><h3>Small pilots that prove value</h3><p>Build a small working version, let people react, then fold it in.</p><div class="tags"><span class="tag">LOINC governance</span><span class="tag">Dashboard pilot</span><span class="tag">CAB portal</span></div></div>
+    <div class="hw"><h3>Research from setup to stage</h3><p>Design, collect, analyze, write and present.</p><div class="tags"><span class="tag">CHD</span><span class="tag">Suki</span><span class="tag">JAMIA paper: automated LOINC mapping in OCL</span></div></div>
+    <div class="hw"><h3>Teaching shaped to the room</h3><p>Start from what learners know and adjust as I go.</p><div class="tags"><span class="tag">ZIMAM surveys</span><span class="tag">SA Standards 101</span><span class="tag">How to AI</span></div></div>
+    <div class="hw"><h3>Messy work into clear process</h3><p>Write down how work really happens, then give it a structure.</p><div class="tags"><span class="tag">Triage guide</span><span class="tag">Translation policy</span><span class="tag">Contracting</span></div></div>
+    <div class="hw"><h3>Growing the portfolio</h3><p>Find and pitch new work, then deliver it.</p><div class="tags"><span class="tag">WHO / OCL</span><span class="tag">ZIMAM</span><span class="tag">CDC Ghana</span><span class="tag">Horizon Europe</span></div></div>
+    <div class="hw"><h3>Knowledge people can act on</h3><p>I set up shared knowledge repositories and use AI to keep them organized. Teams can find what we know, build on it together, and act on it.</p><div class="tags"><span class="tag">LOINC decisions and processes</span><span class="tag">Terminology guidance</span><span class="tag">ZIMAM workshop</span><span class="tag">GHI projects</span></div></div>
+  </div>
+</section>
+
+<section aria-labelledby="roles">
+  <div class="sec-head">
+    <div class="eyebrow">Roles</div>
+    <h2 id="roles">Many roles, depending on the need</h2>
+    <p>Filled dot: main role. Open dot: supporting role.</p>
+  </div>
+  <div class="tablewrap">
+    <table class="roles">
+      <thead><tr><th>Project</th><th>Advisor</th><th>Builder</th><th>PM</th><th>Researcher</th><th>Teacher</th><th>Process</th><th>Business dev</th></tr></thead>
+      <tbody>
+        <tr><td>LOINC</td><td><span class="dot half"></span></td><td><span class="dot"></span></td><td><span class="dot half"></span></td><td></td><td></td><td><span class="dot"></span></td><td></td></tr>
+        <tr><td>Open Concept Lab</td><td><span class="dot half"></span></td><td><span class="dot half"></span></td><td><span class="dot"></span></td><td><span class="dot half"></span></td><td><span class="dot half"></span></td><td></td><td><span class="dot"></span></td></tr>
+        <tr><td>ZIMAM / World Bank</td><td><span class="dot"></span></td><td></td><td><span class="dot half"></span></td><td></td><td><span class="dot"></span></td><td><span class="dot half"></span></td><td><span class="dot"></span></td></tr>
+        <tr><td>Global Fund South Africa</td><td><span class="dot"></span></td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td><span class="dot half"></span></td></tr>
+        <tr><td>UNICEF PHIT</td><td><span class="dot half"></span></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td></tr>
+        <tr><td>Palladium GHSD</td><td><span class="dot"></span></td><td></td><td></td><td><span class="dot half"></span></td><td></td><td><span class="dot half"></span></td><td></td></tr>
+        <tr><td>Suki AI evaluation</td><td><span class="dot half"></span></td><td><span class="dot half"></span></td><td></td><td><span class="dot"></span></td><td></td><td></td><td></td></tr>
+        <tr><td>CHD study</td><td></td><td></td><td></td><td><span class="dot"></span></td><td><span class="dot"></span></td><td></td><td></td></tr>
+        <tr><td>Contracting redesign</td><td></td><td></td><td></td><td><span class="dot"></span></td><td></td><td><span class="dot"></span></td><td></td></tr>
+        <tr><td>AI enablement</td><td><span class="dot half"></span></td><td><span class="dot half"></span></td><td></td><td></td><td><span class="dot"></span></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="fit">
+  <div class="sec-head">
+    <div class="eyebrow">Strategic fit</div>
+    <h2 id="fit">How my work serves the CBMI and RI plans</h2>
+    <p>CBMI's 2024 to 2027 plan goals, the matching RI plan goal, and the CBMI targets my 2026 work feeds.</p>
+  </div>
+  <div class="tablewrap">
+    <table class="fit">
+      <thead><tr><th>CBMI goal</th><th>My 2026 work</th><th>CBMI targets it feeds</th><th>Fit</th></tr></thead>
+      <tbody>
+        <tr><td class="goal"><b>Partnerships</b><span>RI G2 · Partner of choice</span></td><td><div class="work"><span class="tag">SA Dept. of Health</span><span class="tag">Dubai Health Authority</span><span class="tag">World Bank</span><span class="tag">UNICEF</span><span class="tag">Palladium</span></div></td><td class="tgt"><b>Engagement with ministries</b> · advocating standards-based systems</td><td><span class="str s">Strong</span></td></tr>
+        <tr><td class="goal"><b>Operations and revenue</b><span>RI G3 · Financial stability</span></td><td><div class="work"><span class="tag">4 new funded projects</span><span class="tag">WHO / OCL (RI lead)</span><span class="tag">Industry partner (Suki)</span><span class="tag">CDC Ghana</span></div></td><td class="tgt"><b>Industry-funded share</b> · GHI covering its own costs · new proposals</td><td><span class="str s">Strong</span></td></tr>
+        <tr><td class="goal"><b>Training and mentoring</b><span>RI G4 · Workforce development</span></td><td><div class="work"><span class="tag">ZIMAM workshop</span><span class="tag">SA lunch and learns</span><span class="tag">CHD students</span><span class="tag">How to AI</span></div></td><td class="tgt"><b>Host workshops and trainings</b></td><td><span class="str s">Strong</span></td></tr>
+        <tr><td class="goal"><b>Real-world informatics R&amp;D</b><span>RI G1 · Research and discovery</span></td><td><div class="work"><span class="tag">Suki AI evaluation</span><span class="tag">CHD study</span><span class="tag">JAMIA paper: automated LOINC mapping in OCL</span><span class="tag">LOINC (HDS)</span></div></td><td class="tgt"><b>Collaborate with HDS</b> · global consulting · staff conference talks</td><td><span class="str s">Strong</span></td></tr>
+        <tr><td class="goal"><b>Growth and culture</b><span>RI G4 · Organizational excellence</span></td><td><div class="work"><span class="tag">LOINC governance</span><span class="tag">Contracting redesign</span><span class="tag">AI enablement</span></div></td><td class="tgt">Better tools and processes for teams</td><td><span class="str m">Contributing</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Goal mapping is my own reading of the CBMI Strategic and Operational Plan (July 2024 to June 2027) and the RI Strategic Plan 2024 to 2028.</p>
+</section>
+
+<section aria-labelledby="next">
+  <div class="sec-head"><div class="eyebrow">In motion</div><h2 id="next">Heading into 2027</h2></div>
+  <div class="next">
+    <div class="tile"><h3>Proposals</h3><p>WHO and OCL, South Africa follow-on, ZIMAM next steps</p></div>
+    <div class="tile"><h3>Papers</h3><p>CHD paper 1 and the Suki evaluation paper</p></div>
+    <div class="tile"><h3>LOINC</h3><p>Translation policy, validation rules, 2027 education approach</p></div>
+  </div>
+</section>
+
+<footer>Compiled November 23, 2026 from my CV, my daily time and task log, and my 2026 project repositories.</footer>
+</div>
+
+</body>
+</html>
